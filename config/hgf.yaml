@@ -1,0 +1,27 @@
+loader:
+  endpoint: "https://huggingface.co"
+  max_workers: 1
+  save_name: "datasets"
+  download_workers: 8
+  download_max_attempts: 5
+  retry_base_seconds: 3
+
+
+datasets:
+  - name: "弱智吧语录"
+    repo_id: "TCDATA/ruozhiba"
+    url: "https://huggingface.co/datasets/TCDATA/ruozhiba"
+    enabled: true
+    status: false
+
+  - name: "史上最烂小说开头"
+    repo_id: "venkatasg/bulwer-lytton"
+    url: "https://huggingface.co/datasets/venkatasg/bulwer-lytton"
+    enabled: false
+    status: false
+
+  - name: "有趣的 AI 角色提示词"
+    repo_id: "fka/prompts.chat"
+    url: "https://huggingface.co/datasets/fka/prompts.chat"
+    enabled: false
+    status: false

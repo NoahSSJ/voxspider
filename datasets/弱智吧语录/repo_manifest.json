@@ -1,0 +1,53 @@
+{
+  "id": "TCDATA/ruozhiba",
+  "author": "TCDATA",
+  "card_data": {
+    "license": "cc-by-nc-4.0"
+  },
+  "language": null,
+  "license": "cc-by-nc-4.0",
+  "task_categories": null,
+  "citation": null,
+  "created_at": "2024-05-18T13:09:44+00:00",
+  "description": "\n\t\n\t\t\n\t\n\t\n\t\tReference\n\t\n\n\nLeymore/ruozhiba\n\n",
+  "commit_id": "08409ee464e241ad69ff9c5b25fe0621a5ddf1b7",
+  "tags": [
+    "license:cc-by-nc-4.0",
+    "size_categories:10K<n<100K",
+    "format:json",
+    "modality:text",
+    "library:datasets",
+    "library:dask",
+    "library:mlcroissant",
+    "library:polars",
+    "region:us"
+  ],
+  "used_storage": 38202859,
+  "main_size": null,
+  "file_manifest": [
+    {
+      "path": ".gitattributes",
+      "size": 2585,
+      "blob_id": "642897d7fdd0a7fc6ad416aeb14dff0aaa569820",
+      "sha256": null
+    },
+    {
+      "path": "README.md",
+      "size": 104,
+      "blob_id": "bbe0335bceb6530bcd10123a78dcc8a955588eac",
+      "sha256": null
+    },
+    {
+      "path": "good.jsonl",
+      "size": 511769,
+      "blob_id": "ac6143d734cdef8a097816c1e4eea773d1319df6",
+      "sha256": "80b4aecfd4382248d20ace71d4f638d19e41da09d45d0387fa7ec48ab41d9438"
+    },
+    {
+      "path": "norm.jsonl",
+      "size": 13932526,
+      "blob_id": "2682ddb68eb8120a38913112cdb4389b8e013b7b",
+      "sha256": "5eb2a91425e6413a8c8eac6e5ce29c98365ed7c63f271f608cc9683ddb381e0c"
+    }
+  ]
+}
