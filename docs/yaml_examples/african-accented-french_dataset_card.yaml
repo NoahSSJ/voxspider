@@ -1,0 +1,129 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: african-accented-french
+  name: African Accented French
+  version: unversioned
+  split: all
+  description: OpenSLR SLR57 complete RAW archive of African-accented French speech
+    from the Yaounde, CA16 and Niger collections.
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_source
+    date: '2026-08-05'
+    description: Archived the complete OpenSLR 57 African_Accented_French.tar.gz payload
+      without transformation. A 2026-08-14 audit measured 16,656 WAV files and verified
+      the stored archive SHA-256.
+    recipe_uri: https://www.openslr.org/57/
+  manifests:
+    samples: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/fr/african-accented-french/aaf.tar.gz#African_Accented_French/transcripts/
+data:
+  num_samples: 16656
+  num_recordings: 16656
+  total_duration_hours: 19.929974166667094
+  audio:
+    sampling_rate: 16000
+    codec: pcm_s16le
+    num_channels: 1
+    bits_per_sample: 16
+  languages:
+  - language: fr
+    locale: fr
+    duration_hours: 19.929974166667094
+  statistics:
+    archive:
+      filename: aaf.tar.gz
+      format: tar.gz
+      size_bytes: 1869299860
+      sha256: 3d9edcd82c51a56686ac40f5106dee2ed5e5cb5a6d6b7fb0a9d6e6e19967187b
+      files: 16663
+      uncompressed_bytes: 2298099848
+    official_collections:
+      yaounde_speakers: 84
+      ca16_speakers: 125
+      niger_speakers: 23
+    physical_splits:
+      train:
+        num_recordings: 14394
+        duration_hours: 18.0174094965282
+      dev:
+        num_recordings: 986
+        duration_hours: 0.9631944444444445
+      devtest:
+        num_recordings: 761
+        duration_hours: 0.6363888888888889
+      test:
+        num_recordings: 515
+        duration_hours: 0.3129813368055554
+    transcript_reconciliation:
+      train_index_rows: 11517
+      train_rows_with_same_split_audio: 11460
+      dev_index_rows: 986
+      dev_rows_with_same_split_audio: 986
+      devtest_index_rows: 482
+      devtest_rows_with_same_split_audio: 481
+      test_index_rows: 515
+      test_rows_with_same_split_audio: 515
+      byte_identical_cross_split_basenames: 18
+  documentation_notes:
+  - OpenSLR describes approximately 22 hours; direct WAV-header measurement of the
+    complete archive is 19.929974 hours.
+  - The archive contains more WAV files than canonical transcript-index rows in train
+    and devtest, and 58 transcript rows have no WAV in the same physical split. Cleaned
+    conversion must reconcile these source defects explicitly.
+  - The legacy RAW archive remains at dataset root as a historical layout; source/
+    migration is not required.
+provenance:
+  source_url: https://www.openslr.org/57/
+  archive_uri: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/fr/african-accented-french/aaf.tar.gz
+  archive_sha256: 3d9edcd82c51a56686ac40f5106dee2ed5e5cb5a6d6b7fb0a9d6e6e19967187b
+  audit_reports:
+  - reports/raw-archive-audit.json
+  - reports/raw-transcript-reconciliation.json
+labels:
+  fixed: {}
+  distribution:
+    interaction.type:
+      monologue: null
+      dialogue: null
+    speaking_style:
+      read: null
+      spontaneous: null
+  unknown:
+  - scenario.environment
+  - scenario.channel
+  - scenario.product_context
+  - scenario.content_genre
+  - acoustic
+  - device
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - asr_training
+  - asr_evaluation
+  not_recommended_for:
+  - tts_training
+  - voice_cloning
+homepage: https://www.openslr.org/57/
+license: Apache-2.0
+access:
+  requires_auth: false
+  paid: false
+  note: Public OpenSLR download under Apache-2.0.
+generation:
+  generated_at: '2026-08-14T17:39:18+08:00'
+  entrypoint: dataset_download.download interactive RAW audit
+  args:
+    source_uri: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/fr/african-accented-french/aaf.tar.gz
+    source_sha256: 3d9edcd82c51a56686ac40f5106dee2ed5e5cb5a6d6b7fb0a9d6e6e19967187b

@@ -1,0 +1,4 @@
+interface:
+  display_name: "HF 逐文件归档到 TOS"
+  short_description: "逐文件核验归档、全量对账、生成发布数据集卡并登记完整清单"
+  default_prompt: "使用 $hf-filewise-tos-archive 按本项目的逐文件流程完成指定数据集的 raw 归档、全量对账、数据集卡发布和 archived.json 登记，核验记录落盘后逐文件清理本地源文件。"

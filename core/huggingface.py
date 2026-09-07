@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import threading
 from typing import Any
 import subprocess
@@ -11,11 +12,12 @@ from dotenv import load_dotenv
 import yaml
 import logging
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import shutil
 import hashlib
 import time
 import random
+import re
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -28,7 +30,7 @@ def get_root_dir():
     raise RuntimeError("错误")
 
 root_dir = get_root_dir()
-yaml_path = root_dir.joinpath('config\\hgf.yaml')
+yaml_path = (root_dir / "config").joinpath('hgf.yaml')
 # print(root_dir)
 def setup_logger(dataset_name: str = "test"):
     log_dir = root_dir / "logs" / dataset_name
@@ -68,8 +70,47 @@ class HuggingfaceSpider():
         self.save_dir: Path = root_dir / "datasets" / self.save_name
         self.save_dir.mkdir(parents=True, exist_ok=True)
         self.api = HfApi(endpoint=self.endpoint, token=os.getenv("HF_TOKEN"))
+        self.tos_url = dataset['tos_url']
+    
+    
+    
+    def save_manifest(self, repo_dict):
+        manifest_path = self.save_dir / "repo_manifest.json"
+        temp_path = self.save_dir / "repo_manifest.json.tmp"
+
+        with temp_path.open("w", encoding="utf-8") as f:
+            json.dump(repo_dict, f, ensure_ascii=False, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+
+        os.replace(temp_path, manifest_path)
+        # 删除源文件前，确保清单的原子替换也已持久化。
+        directory_fd = os.open(self.save_dir, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
     
     def get_manifest(self):
+        manifest_path = self.save_dir / "repo_manifest.json"
+        if manifest_path.exists():
+            repo_dict = json.loads(
+                manifest_path.read_text(encoding="utf-8")
+            )
+
+            if repo_dict.get("id") != self.repo_id:
+                raise ValueError("清单仓库 ID 与当前配置不一致")
+            if not repo_dict.get("commit_id"):
+                raise ValueError("清单缺少 commit_id")
+
+            for item in repo_dict["file_manifest"]:
+                item.setdefault("local_verified", False)
+                item.setdefault("tos_verified", False)
+                item.setdefault("local_deleted", False)
+
+            self.save_manifest(repo_dict)
+            return repo_dict  # 这里不能漏
+        
         repo_dict = {}
         info = self.api.dataset_info(self.repo_id)
         pprint(info)
@@ -124,7 +165,10 @@ class HuggingfaceSpider():
                     "path": path,
                     "size": size,
                     "blob_id": blob_id,
-                    "sha256": lf_sha256
+                    "sha256": lf_sha256,
+                    "local_verified": False,
+                    "tos_verified": False,
+                    "local_deleted": False,
                 }
                 file_manifest.append(file_dict)
         repo_dict['file_manifest'] = file_manifest
@@ -132,7 +176,9 @@ class HuggingfaceSpider():
         repo_dict_path = self.save_dir / "repo_manifest.json"
         # with open(repo_dict_path, "w", encoding="utf-8") as f:
             # json.dump(repo_dict, f, ensure_ascii=False, indent=2)
-        Path(repo_dict_path).write_text(data=json.dumps(repo_dict, ensure_ascii=False, indent=2), encoding='utf-8')
+        # Path(repo_dict_path).write_text(data=json.dumps(repo_dict, ensure_ascii=False, indent=2), encoding='utf-8')
+        # return repo_dict
+        self.save_manifest(repo_dict)
         return repo_dict
 
     def download_file(self):
@@ -142,81 +188,274 @@ class HuggingfaceSpider():
         for index, item in enumerate(items, start=1):
             print(f"index:{index}, item:{item}")
             path = item['path']
+            relative = PurePosixPath(path)
+            if (not path or relative.is_absolute() or '..' in relative.parts
+                    or str(relative) != path or '\\' in path
+                    or relative.parts[0] in {'.cache', 'repo_manifest.json',
+                        'repo_manifest.json.tmp', 'dataset_card.yaml',
+                        'source_reconciliation.json', 'archive_report.json',
+                        'card_statistics.json', 'upstream_evidence.json'}):
+                raise ValueError(f"不能下载或清理管理文件/非法路径: {path!r}")
+            file_path = self.save_dir / path
+            # 不跟随符号链接，也不允许通过父目录链接删除工作目录外的文件。
+            if any(part.is_symlink() for part in (file_path, *file_path.parents)):
+                raise ValueError(f"不能清理符号链接路径: {file_path}")
+            if file_path.exists() and not file_path.is_file():
+                raise ValueError(f"本地路径不是普通文件: {file_path}")
             size = item['size']
             blob_id = item['blob_id']
             sha256 = item['sha256']
-            log.info(f"index:{index}, path:{path}, size:{size}, blob_id:{blob_id}, sha256:{sha256}")
-            # download the file
-            flag = hf_hub_download(
-                repo_id=self.repo_id, 
-                filename=path, 
-                repo_type="dataset",
-                revision=commit_id,
-                local_dir=self.save_dir,
-                endpoint=self.endpoint,
+            remote_path = f"{self.tos_url.rstrip('/')}/{path}"
+            identity = {
+                "repo_id": self.repo_id, "commit_id": commit_id,
+                "path": path, "size": size, "sha256": sha256, "blob_id": blob_id,
+            }
+            previous = item.get("tos_verification") or {}
+            resume_remote = (
+                not file_path.exists()
+                and item.get("local_verified") is True
+                and item.get("tos_verified") is True
+                and previous.get("identity") == identity
+                and previous.get("uri") == remote_path
+                and previous.get("size") == size
+                and previous.get("method") == "size_crc64"
+                and isinstance(previous.get("local_crc64"), str)
+                and re.fullmatch(r"\d+", previous["local_crc64"]) is not None
+                and previous.get("remote_crc64") == previous["local_crc64"]
             )
-            log.info("Download completed - local_path:%s", self.save_dir)
-            file_path = self.save_dir / path
-            actual_size = file_path.stat().st_size
-            if actual_size != size:
-                raise ValueError(f"File size mismatch for {file_path}: expected {size}, got {actual_size}")
+            if resume_remote:
+                local_crc64 = int(previous["local_crc64"])
+                log.info("本地文件已清理，重新核验远端后跳过下载: %s", path)
             else:
-                log.info(f"File size verified for {file_path}: {actual_size} bytes")
-            if sha256:
-                # file_bytes = Path(file_path).read_bytes()
-                # file_hash = hashlib.sha256(file_bytes).hexdigest()
-                with Path(file_path).open('rb') as f:
-                    file_hash = hashlib.file_digest(f, "sha256").hexdigest()
-                if file_hash != sha256:
-                    raise ValueError(f"SHA256 mismatch for {file_path}: expected {sha256}, got {file_hash}")
-                else:
-                    log.info(f"SHA256 verified for {file_path}: {file_hash}")
-            elif blob_id:
-                git_hash = hashlib.sha1()
-                git_hash.update(f"blob {actual_size}\0".encode("ascii"))
-                with file_path.open("rb") as f:
-                    while chunk := f.read(1024 * 1024):
-                        git_hash.update(chunk)
-                actual_blob_id = git_hash.hexdigest()
-                if actual_blob_id != blob_id:
-                    raise ValueError(
-                        f"Blob ID mismatch: expected {blob_id}, got {actual_blob_id}"
-                    )
-                else:
-                    log.info(f"blob_id verified for {file_path}: {actual_blob_id}")
-            log.info(f"Successfully downloaded and verified file: {file_path}")
-            # 还有一个git的 blob_id可以验证文件的完整性，后面补上验证
-            time.sleep(random.uniform(3, 5))  # Sleep for a random time between 0.5 and 1.5 seconds
-            remote_path = (
-                "tos://vox-asr-audio-data/"
-                "SPEECH-DATA-TEMP/raw/dataset_repository/"
-                f"tts/zh/example/source/{path}"
-            )
-            command = [
-                "tosutil",
-                "cp",
-                str(file_path),
-                remote_path,
-                "-vchecksum",
-            ]
-            try:
-                result = subprocess.run(
-                    command,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
-                    text=True,
-                    check=False,
+                item['local_verified'] = False
+                item['local_deleted'] = False
+                self.save_manifest(repo_dict)
+                # download the file
+                flag = hf_hub_download(
+                    repo_id=self.repo_id, 
+                    filename=path, 
+                    repo_type="dataset",
+                    revision=commit_id,
+                    local_dir=self.save_dir,
+                    endpoint=self.endpoint,
                 )
-                if result.returncode != 0:
-                    raise RuntimeError(
-                        f"TOS 上传失败，exit_code={result.returncode}\n"
-                        f"{result.stdout}"
+                log.info("Download completed - local_path:%s", self.save_dir)
+                file_path = self.save_dir / path
+                actual_size = file_path.stat().st_size
+                if actual_size != size:
+                    raise ValueError(f"File size mismatch for {file_path}: expected {size}, got {actual_size}")
+                else:
+                    log.info(f"File size verified for {file_path}: {actual_size} bytes")
+                if sha256:
+                    # file_bytes = Path(file_path).read_bytes()
+                    # file_hash = hashlib.sha256(file_bytes).hexdigest()
+                    with Path(file_path).open('rb') as f:
+                        file_hash = hashlib.file_digest(f, "sha256").hexdigest()
+                    if file_hash != sha256:
+                        raise ValueError(f"SHA256 mismatch for {file_path}: expected {sha256}, got {file_hash}")
+                    else:
+                        log.info(f"SHA256 verified for {file_path}: {file_hash}")
+                elif blob_id:
+                    git_hash = hashlib.sha1()
+                    git_hash.update(f"blob {actual_size}\0".encode("ascii"))
+                    with file_path.open("rb") as f:
+                        while chunk := f.read(1024 * 1024):
+                            git_hash.update(chunk)
+                    actual_blob_id = git_hash.hexdigest()
+                    if actual_blob_id != blob_id:
+                        raise ValueError(
+                            f"Blob ID mismatch: expected {blob_id}, got {actual_blob_id}"
+                        )
+                    else:
+                        log.info(f"blob_id verified for {file_path}: {actual_blob_id}")
+                item["local_verified"] = True
+                self.save_manifest(repo_dict)
+                log.info(f"Successfully downloaded and verified file: {file_path}")
+                local_stat = file_path.stat()
+                local_signature = (local_stat.st_dev, local_stat.st_ino, local_stat.st_size,
+                                   local_stat.st_mtime_ns, local_stat.st_ctime_ns)
+            remote_path = f"{self.tos_url.rstrip('/')}/{path}"
+            if item.get("local_verified") is not True:
+                raise RuntimeError(f"文件尚未通过本地核验: {file_path}")
+
+            item["tos_verified"] = False
+            item["tos_verification"] = None
+            self.save_manifest(repo_dict)
+                
+            try:
+                if not resume_remote:
+                    # 1. 计算已经通过本地核验的文件的 CRC64
+                    hash_result = subprocess.run(
+                        ["tosutil", "hash", str(file_path), "-type=crc64"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        check=False,
                     )
-                log.info(f"TOS 上传成功，exit_code={result.returncode}\n{result.stdout}")
-                log.info(result.stdout)
-                log.info(f"Successfully uploaded {file_path} to TOS at {remote_path}")
-            except Exception as e:
-                log.error("未安装tosutil")
+
+                    if hash_result.returncode != 0:
+                        raise RuntimeError(
+                            f"计算本地 CRC64 失败:\n{hash_result.stdout}"
+                        )
+
+                    crc_match = re.search(
+                        r"^\s*crc64:\s*(\d+)\s*$",
+                        hash_result.stdout,
+                        flags=re.MULTILINE | re.IGNORECASE,
+                    )
+                    if crc_match is None:
+                        raise RuntimeError(
+                            f"无法解析本地 CRC64:\n{hash_result.stdout}"
+                        )
+
+                    local_crc64 = int(crc_match.group(1))
+
+                # 2. 最多查询两次：
+                # 第一次检查目标是否存在；不存在则上传，再查询一次。
+                for check_index in range(2):
+                    stat_result = subprocess.run(
+                        ["tosutil", "stat", remote_path, "-sbh"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        check=False,
+                        timeout=120,
+                    )
+
+                    if stat_result.returncode == 0:
+                        # 3. 目标存在，解析大小和服务端 CRC64
+                        size_match = re.search(
+                            r"^\s*Size:\s*(\d+)\s*$",
+                            stat_result.stdout,
+                            flags=re.MULTILINE | re.IGNORECASE,
+                        )
+                        remote_crc_match = re.search(
+                            r"^\s*HashCrc64ecma:\s*(\d+)\s*$",
+                            stat_result.stdout,
+                            flags=re.MULTILINE | re.IGNORECASE,
+                        )
+
+                        if size_match is None or remote_crc_match is None:
+                            raise RuntimeError(
+                                "远端缺少大小或 CRC64，或输出格式无法解析；"
+                                f"不能标记核验通过:\n{stat_result.stdout}"
+                            )
+
+                        remote_size = int(size_match.group(1))
+                        remote_crc64 = int(remote_crc_match.group(1))
+
+                        if remote_size != size:
+                            raise ValueError(
+                                f"TOS 文件大小不符，停止处理且不覆盖: {remote_path}\n"
+                                f"期望={size}, 实际={remote_size}"
+                            )
+
+                        if remote_crc64 != local_crc64:
+                            raise ValueError(
+                                f"TOS CRC64 不符，停止处理且不覆盖: {remote_path}\n"
+                                f"本地={local_crc64}, 远端={remote_crc64}"
+                            )
+
+                        # 已有对象一致也会走到这里，直接复用，不重复上传。
+                        break
+
+                    # 只将明确的对象不存在响应视为可上传。
+                    # 网络、权限、桶不存在等错误均不能触发上传。
+                    output = stat_result.stdout
+                    has_no_such_key = re.search(
+                        r"\bcode\s*(?:[:=]\s*)?\[?[\"']?NoSuchKey\b",
+                        output,
+                        flags=re.IGNORECASE,
+                    ) is not None
+                    has_object_missing_code = (
+                        re.search(
+                            r"\bStatus\s*\[\s*404\s*\]",
+                            output,
+                            flags=re.IGNORECASE,
+                        ) is not None
+                        and re.search(
+                            r"\berror message\s*\[\s*0017-00000003\s*\]",
+                            output,
+                            flags=re.IGNORECASE,
+                        ) is not None
+                    )
+                    missing_object = has_no_such_key or has_object_missing_code
+
+                    if not missing_object:
+                        raise RuntimeError(
+                            f"TOS 对象查询失败:\n{output}"
+                        )
+
+                    if check_index == 1:
+                        raise RuntimeError(
+                            f"上传完成后仍查询不到目标对象: {remote_path}"
+                        )
+
+                    if resume_remote:
+                        # 本地已删除但远端丢失：保持 tos_verified=false，显式失败。
+                        # 下次重跑会进入正常下载流程，不会把旧状态当成功。
+                        raise RuntimeError(f"已清理文件的远端对象缺失，需要重新下载: {remote_path}")
+
+                    # 4. 目标明确不存在，上传并开启传输一致性校验
+                    upload_result = subprocess.run(
+                        [
+                            "tosutil", "cp",
+                            str(file_path),
+                            remote_path,
+                            "-vchecksum",
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        check=False,
+                    )
+
+                    if upload_result.returncode != 0:
+                        raise RuntimeError(
+                            f"TOS 上传失败:\n{upload_result.stdout}"
+                        )
+
+                    log.info("上传成功，开始远端核验: %s", remote_path)
+
+                # 5. 只有远端大小、CRC64 都匹配才保存 True
+                item["tos_verification"] = {
+                    "identity": identity,
+                    "uri": remote_path,
+                    "size": remote_size,
+                    "local_crc64": str(local_crc64),
+                    "remote_crc64": str(remote_crc64),
+                    "method": "size_crc64",
+                    "verified_at": datetime.now(timezone.utc).isoformat(),
+                }
+                item["tos_verified"] = True
+                self.save_manifest(repo_dict)
+
+                log.info("TOS 单文件核验通过: %s", remote_path)
+
+                # 6. 远端核验结果持久保存后，才删除确切的本地源文件。
+                if not resume_remote:
+                    if any(part.is_symlink() for part in (file_path, *file_path.parents)):
+                        raise ValueError(f"清理前发现符号链接: {file_path}")
+                    current = file_path.stat()
+                    signature = (current.st_dev, current.st_ino, current.st_size,
+                                 current.st_mtime_ns, current.st_ctime_ns)
+                    if signature != local_signature:
+                        item["local_verified"] = False
+                        self.save_manifest(repo_dict)
+                        raise RuntimeError(f"本地文件在核验后发生变化，保留不删: {file_path}")
+                    file_path.unlink()
+                    directory_fd = os.open(file_path.parent, os.O_RDONLY | os.O_DIRECTORY)
+                    try:
+                        os.fsync(directory_fd)
+                    finally:
+                        os.close(directory_fd)
+                item["local_deleted"] = True
+                self.save_manifest(repo_dict)
+                log.info("本地文件已清理，继续下一个文件: %s", file_path)
+
+            except Exception:
+                log.exception("TOS 上传、核验或本地清理失败: %s", remote_path)
+                raise
         return  
     
     
@@ -245,11 +484,11 @@ class HuggingfaceSpider():
 
 
 
-total, used, free = shutil.disk_usage("/")
-log.info(f"Disk usage - Total: {total}, Used: {used}, Free: {free}")
+# total, used, free = shutil.disk_usage("/")
+# log.info(f"Disk usage - Total: {total}, Used: {used}, Free: {free}")
 
-size = (Path(r'logs\test\run.log').stat().st_size) / (1024 ** 2)
-log.info(f"File size: {size}Mib")
+# size = (Path(r'logs\test\run.log').stat().st_size) / (1024 ** 2)
+# log.info(f"File size: {size}Mib")
 
 # HuggingfaceSpider.run(loader=loader)
 

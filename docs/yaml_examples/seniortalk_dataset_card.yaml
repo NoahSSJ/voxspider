@@ -1,0 +1,36 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: seniortalk
+  name: seniortalk
+  version: source
+  split: all
+  description: SeniorTalk 高龄老人对话(BAAI);已下 sentence+dialogue
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation: []
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: zh
+    locale: zh
+provenance:
+  origin: tos://vox-tos-tts-speech/asr/xuecheng/h20/data/zh/SeniorTalk
+  note: SeniorTalk 高龄老人对话(BAAI);已下 sentence+dialogue
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - speaker
+  availability:
+    transcript: true
+usage:
+  intended_use:
+  - asr_evaluation
+  not_recommended_for: []

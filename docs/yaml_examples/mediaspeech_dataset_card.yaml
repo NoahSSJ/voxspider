@@ -1,0 +1,36 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: mediaspeech
+  name: mediaspeech
+  version: source
+  split: all
+  description: OpenSLR 108;FR/<uuid>.flac + 同名 .txt 扁平配对。人工转写(非字幕扒取)
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation: []
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: fr
+    locale: fr
+provenance:
+  download_url: https://www.openslr.org/108/
+  note: OpenSLR 108;FR/<uuid>.flac + 同名 .txt 扁平配对。人工转写(非字幕扒取)
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - speaker
+  availability:
+    transcript: true
+usage:
+  intended_use:
+  - asr_evaluation
+  not_recommended_for: []

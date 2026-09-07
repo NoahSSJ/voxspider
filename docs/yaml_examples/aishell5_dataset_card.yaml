@@ -1,0 +1,188 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: aishell5
+  name: AISHELL-5
+  version: unversioned
+  split: all
+  description: >-
+    AISHELL-5 中文车内多通道多人会话数据集。完整官方发布包含 train、Dev、Eval1、Eval2
+    和约 40 小时无说话人语音的 Noise；RAW 保留单一完整官方归档，同时保留历史上已展开的
+    Eval1/Eval2 对象。
+  subsets_note: >-
+    train/dev/eval1/eval2/noise 是官方归档中的一级物理分区；Dev 在平台规范中对应 dev，
+    Eval1/Eval2 均为 test，Noise 是不含说话人语音和转写的辅助非语音分区。
+  subsets:
+    - id: train
+      split: train
+      num_samples: 568
+    - id: dev
+      split: dev
+      num_samples: 18
+    - id: eval1
+      split: test
+      num_samples: 18
+    - id: eval2
+      split: test
+      num_samples: 18
+    - id: noise
+      num_samples: 60
+
+status: raw
+
+source:
+  owner_type: public
+  source_platform: dataset_repository
+
+lineage:
+  upstream:
+    - id: aishell5-official
+      type: raw_corpus
+      description: >-
+        北京希尔贝壳科技发布的 AISHELL-5 / OpenSLR SLR159；完整发布由
+        train、Dev、Eval1、Eval2、Noise 五个内部归档组成。
+      uri: https://www.aishelltech.com/aishell_5
+    - id: aishell5-openslr-159
+      type: dataset_repository
+      description: OpenSLR SLR159 发布页和随包 info.txt 的元数据来源。
+      uri: https://www.openslr.org/159/
+    - id: aishell5-legacy-eval1-eval2
+      type: raw_corpus
+      description: >-
+        本 RAW 根中既有的 Eval1/Eval2 展开视图；242 个 WAV 和 216 个 TextGrid
+        与完整归档对应成员的路径和大小一致，本次增量发布原样保留。
+      uri: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/zh/aishell5
+  derivation:
+    - step: source_download
+      description: >-
+        从 AISHELL 官网公开网盘镜像下载 AISHELL-5.tar.gz；文件大小
+        73568963887 bytes，CRC32=55e57136。
+      date: 2026-08-17
+    - step: archive_audit
+      description: >-
+        不展开保存归档；顺序审计外层和五个内部 tar.gz 的全部成员，未发现绝对路径、
+        路径穿越、链接或特殊文件，全部 4537 个 WAV 头可解析为 16 kHz 单声道 PCM16。
+      date: 2026-08-18
+    - step: raw_augmentation
+      description: >-
+        在 source/AISHELL-5.tar.gz 新增完整官方归档；不覆盖或删除既有 Eval1/Eval2 对象。
+      date: 2026-08-18
+  manifests:
+    samples: null
+
+data:
+  num_samples: 682
+  num_recordings: 4537
+  total_duration_hours: 159.090962
+  audio:
+    sampling_rate: 16000
+    codec: pcm_s16le
+    num_channels: 1
+  languages:
+    - language: zh
+      locale: zh-CN
+      duration_hours: 118.796985
+  statistics:
+    duration_basis: >-
+      按每个会话任选一个等长单声道通道计算，避免近讲和多路远讲通道重复累计；
+      语音分区为 118.796985 小时，Noise 为 40.293977 小时。
+    official_active_speech_duration_hours: 104.18
+    official_active_speech_duration_note: >-
+      官网近似值：train 94h、Dev 3.3h、Eval1 3.3h、Eval2 3.58h；
+      与本 Card 的原始录音墙钟时长不是同一口径。
+    num_sessions: 682
+    num_channel_wav_files: 4537
+    num_textgrid_files: 3835
+    nested_uncompressed_bytes: 115461142845
+    aggregate_channel_duration_hours: 1000.729714
+    by_partition:
+      train:
+        sessions: 568
+        wav_files: 3893
+        textgrid_files: 3511
+        recording_duration_hours: 107.414345
+        aggregate_channel_duration_hours: 737.419154
+        official_active_speech_duration_hours: 94.0
+      dev:
+        sessions: 18
+        wav_files: 120
+        textgrid_files: 108
+        recording_duration_hours: 3.928235
+        aggregate_channel_duration_hours: 26.314384
+        official_active_speech_duration_hours: 3.3
+      eval1:
+        sessions: 18
+        wav_files: 122
+        textgrid_files: 108
+        recording_duration_hours: 3.564986
+        aggregate_channel_duration_hours: 24.068381
+        official_active_speech_duration_hours: 3.3
+      eval2:
+        sessions: 18
+        wav_files: 120
+        textgrid_files: 108
+        recording_duration_hours: 3.889419
+        aggregate_channel_duration_hours: 25.811692
+        official_active_speech_duration_hours: 3.58
+      noise:
+        sessions: 60
+        wav_files: 282
+        textgrid_files: 0
+        recording_duration_hours: 40.293977
+        aggregate_channel_duration_hours: 187.116104
+        official_duration_hours: 40.0
+
+labels:
+  fixed:
+    scenario.environment: vehicle
+    scenario.channel: direct_recording
+  distribution:
+    interaction.type:
+      multi_party: 622
+      non_speech: 60
+    speaking_style:
+      spontaneous: 622
+      unknown: 60
+    acoustic: {}
+    device: {}
+    domain: {}
+  unknown:
+    - speaker
+  availability:
+    transcript: true
+    timestamps: true
+    speaker_labels: true
+    diarization: true
+    pronunciation: false
+    phoneme: false
+    prosody: false
+
+usage:
+  intended_use:
+    - asr_training
+    - asr_evaluation
+    - speech_llm_training
+  not_recommended_for:
+    - tts_training
+    - voice_cloning
+
+access:
+  license: CC BY-NC 4.0
+  requires_auth: false
+  paid: false
+  note: >-
+    许可来源存在冲突：AISHELL 官网标注 CC BY-NC 4.0，而 OpenSLR SLR159
+    及下载归档内 info.txt 标注 CC BY-SA 4.0；在上游澄清前按更保守的
+    CC BY-NC 4.0 管理，不应沿用旧 Card 的 Apache-2.0。
+  evidence:
+    official_homepage: https://www.aishelltech.com/aishell_5
+    openslr: https://www.openslr.org/159/
+    packaged_info_sha256: a4489ea99df7d7595aaf92699fac99e9b18937750f11e21df591bcbdf3f71ed5
+
+generation:
+  generated_at: "2026-08-18T10:22:11+08:00"
+  entrypoint: dataset_download.download interactive RAW augmentation
+  args:
+    archive: source/AISHELL-5.tar.gz
+    preserve_archive: true
+    legacy_eval_action: retain
+

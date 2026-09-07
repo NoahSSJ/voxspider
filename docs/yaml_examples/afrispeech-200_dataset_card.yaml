@@ -1,0 +1,110 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: afrispeech-200
+  name: AfriSpeech-200
+  version: unversioned
+  split: all
+  description: >-
+    AfriSpeech-200 官方 Hugging Face 仓库固定 revision 的完整原始快照，包含
+    train/dev/test 转写 CSV 及按口音和 split 分片的原始音频 tar.gz。
+  subsets:
+    - id: train
+      split: train
+      num_samples: 57819
+      total_duration_hours: 172.880
+    - id: dev
+      split: dev
+      num_samples: 3227
+      total_duration_hours: 8.722
+    - id: test
+      split: test
+      num_samples: 6319
+      total_duration_hours: 18.684
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+    - step: archive_hf_snapshot
+      description: >-
+        完整归档 intronhealth/afrispeech-200 固定 revision，保留仓库原始目录和文件内容。
+      date: "2026-08-12"
+      recipe_uri: hf:intronhealth/afrispeech-200
+  manifests:
+    samples: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/en/afrispeech-200/source/transcripts/train.csv
+data:
+  num_samples: 67365
+  total_duration_hours: 200.286
+  format:
+    storage: hf_repository_snapshot
+    loader: custom_dataset_script
+    layout: source/audio/<accent>/<split>/*.tar.gz + source/transcripts/<split>.csv
+    text_column: transcript
+  statistics:
+    repository_files: 478
+    repository_size_bytes: 61921048011
+    audio_archives: 245
+    splits:
+      train:
+        num_samples: 57819
+        total_duration_hours: 172.880
+      dev:
+        num_samples: 3227
+        total_duration_hours: 8.722
+      test:
+        num_samples: 6319
+        total_duration_hours: 18.684
+    domains:
+      clinical:
+        num_samples: 41647
+      general:
+        num_samples: 25718
+  languages:
+    - language: en
+      locale: en
+      duration_hours: 200.286
+labels:
+  fixed:
+    interaction.type: monologue
+    speaking_style: read
+  distribution:
+    domain:
+      clinical: 41647
+      general: 25718
+    accent: {}
+  unknown:
+    - device
+    - scenario.channel
+    - scenario.content_genre
+    - scenario.environment
+    - scenario.product_context
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+    - asr_training
+    - asr_evaluation
+  not_recommended_for:
+    - commercial_use
+    - tts_training
+    - voice_cloning
+license: CC-BY-NC-SA-4.0
+homepage: https://huggingface.co/datasets/intronhealth/afrispeech-200
+provenance:
+  repo: intronhealth/afrispeech-200
+  revision: b538c6e111914a812af28ff677f8cffc9b404b7d
+  source_uri: hf://datasets/intronhealth/afrispeech-200@b538c6e111914a812af28ff677f8cffc9b404b7d
+  archive_uri: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/en/afrispeech-200/source/
+generation:
+  generated_at: "2026-08-12T23:59:00+08:00"
+  entrypoint: hf download + tosutil cp
+  args: intronhealth/afrispeech-200@b538c6e111914a812af28ff677f8cffc9b404b7d
+  validation: 478 files and 61921048011 bytes matched HF; all 245 tar.gz passed gzip -t

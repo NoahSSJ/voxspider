@@ -1,0 +1,263 @@
+{
+  "datasets": [
+    {
+      "id": "yilele/synth-qa-taste-codec-chat",
+      "author": "yilele",
+      "card_data": {
+        "language": [
+          "zh"
+        ],
+        "task_categories": [
+          "text-to-speech",
+          "automatic-speech-recognition"
+        ],
+        "pretty_name": "Synthetic QA Taste-S Codec Chat",
+        "dataset_info": {
+          "features": [
+            {
+              "name": "messages",
+              "list": [
+                {
+                  "name": "role",
+                  "dtype": "string"
+                },
+                {
+                  "name": "content",
+                  "dtype": "string"
+                }
+              ]
+            },
+            {
+              "name": "audio",
+              "dtype": {
+                "audio": {
+                  "sampling_rate": 16000
+                }
+              }
+            },
+            {
+              "name": "text",
+              "dtype": "string"
+            },
+            {
+              "name": "question",
+              "dtype": "string"
+            },
+            {
+              "name": "segment_id",
+              "dtype": "string"
+            },
+            {
+              "name": "duration",
+              "dtype": "float32"
+            }
+          ],
+          "splits": [
+            {
+              "name": "train",
+              "num_bytes": 1520869549,
+              "num_examples": 18012
+            },
+            {
+              "name": "validation",
+              "num_bytes": 22250265,
+              "num_examples": 270
+            },
+            {
+              "name": "test",
+              "num_bytes": 23897440,
+              "num_examples": 289
+            }
+          ],
+          "download_size": 1544963538,
+          "dataset_size": 1567017254
+        },
+        "configs": [
+          {
+            "config_name": "default",
+            "data_files": [
+              {
+                "split": "train",
+                "path": "data/train-*"
+              },
+              {
+                "split": "validation",
+                "path": "data/validation-*"
+              },
+              {
+                "split": "test",
+                "path": "data/test-*"
+              }
+            ]
+          }
+        ]
+      },
+      "language": [
+        "zh"
+      ],
+      "license": null,
+      "task_categories": [
+        "text-to-speech",
+        "automatic-speech-recognition"
+      ],
+      "citation": null,
+      "created_at": "2026-07-13T15:18:29+00:00",
+      "description": "\n\t\n\t\t\n\t\n\t\n\t\tSynthetic QA Taste-S Codec Chat\n\t\n\n18571 single-turn Traditional Chinese QA utterances with synthesized speech, 21.6 hours of\naudio before codec extraction.\nAssistant speech is represented as:\n<SAY> text_token <a_code> <b_code> ... <p_code> ... </SAY>\n\nEach text token is followed by its 16 Taste-S FSQ codes (codebooks a..p).\n\n\t\n\t\t\n\t\n\t\n\t\tConfigurations\n\t\n\ndefault — messages (user question + assistant <SAY> speech), audio, and answer text.\n\n\t\n\t\t\n\t\n\t\n\t\tStatistics\n\t\n\n\nUtterances: 18571… See the full description on the dataset page: https://huggingface.co/datasets/yilele/synth-qa-taste-codec-chat.",
+      "commit_id": "ae47c0edace564a57ecf34fc1b1dc86b2cb7d267",
+      "tags": [
+        "task_categories:text-to-speech",
+        "task_categories:automatic-speech-recognition",
+        "language:zh",
+        "size_categories:10K<n<100K",
+        "format:parquet",
+        "modality:audio",
+        "modality:text",
+        "library:datasets",
+        "library:dask",
+        "library:polars",
+        "library:mlcroissant",
+        "region:us"
+      ],
+      "used_storage": 1544963538,
+      "main_size": null,
+      "file_manifest": [
+        {
+          "path": ".gitattributes",
+          "size": 2504,
+          "blob_id": "bed0738c7eeb449bca98b5d2f33c89a1ee56349a",
+          "sha256": null,
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/.gitattributes",
+            "size": 2504,
+            "local_crc64": "9476829673175531793",
+            "remote_crc64": "9476829673175531793",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:45:00.251387+00:00"
+          }
+        },
+        {
+          "path": "README.md",
+          "size": 1688,
+          "blob_id": "006232d6ec66a38f8432af40b2cc1fb74dad24da",
+          "sha256": null,
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/README.md",
+            "size": 1688,
+            "local_crc64": "14335638359086785326",
+            "remote_crc64": "14335638359086785326",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:45:05.387378+00:00"
+          }
+        },
+        {
+          "path": "data/test-00000-of-00001.parquet",
+          "size": 23563129,
+          "blob_id": "b8a5c8d8c5b37df3595d8cf1a88bf09113666d2b",
+          "sha256": "83109d2d06c8d199717a93d03ce06adb74cb60f04541b38adfdb576cc4afd69f",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/test-00000-of-00001.parquet",
+            "size": 23563129,
+            "local_crc64": "15415771512605310607",
+            "remote_crc64": "15415771512605310607",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:45:14.360897+00:00"
+          }
+        },
+        {
+          "path": "data/train-00000-of-00004.parquet",
+          "size": 377475018,
+          "blob_id": "fb7f4043a8776418d9d9ad2975ac8c1592103435",
+          "sha256": "0270ee937341ba980049702fc88e3a3b29ceb210161b56d2d5ffddbb39bf1d45",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/train-00000-of-00004.parquet",
+            "size": 377475018,
+            "local_crc64": "3310300845129630040",
+            "remote_crc64": "3310300845129630040",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:45:40.430183+00:00"
+          }
+        },
+        {
+          "path": "data/train-00001-of-00004.parquet",
+          "size": 376846559,
+          "blob_id": "2a63fc96c6562480f00d420b26c5d63f769d0fc5",
+          "sha256": "911cebb6fc2100420a992b09734f11e20348be8641e49085594d49fcfa539f2d",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/train-00001-of-00004.parquet",
+            "size": 376846559,
+            "local_crc64": "6061555073623930863",
+            "remote_crc64": "6061555073623930863",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:46:06.428897+00:00"
+          }
+        },
+        {
+          "path": "data/train-00002-of-00004.parquet",
+          "size": 370827925,
+          "blob_id": "aaf0653cccccda3a2291c56a3359cc1ffa24ecb5",
+          "sha256": "02f3d3cf0920f89fceafc3ae3880c66ac97c6df34b090f7f6a313937f422282d",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/train-00002-of-00004.parquet",
+            "size": 370827925,
+            "local_crc64": "10346788428573227051",
+            "remote_crc64": "10346788428573227051",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:46:33.418485+00:00"
+          }
+        },
+        {
+          "path": "data/train-00003-of-00004.parquet",
+          "size": 374315937,
+          "blob_id": "539c056d73c27877ca7612020e8b4a9ef285c538",
+          "sha256": "ac3d1c14b352351d679992caa90ede9075728eec62994cc37ce9252fbb057fcb",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/train-00003-of-00004.parquet",
+            "size": 374315937,
+            "local_crc64": "2599545923747472986",
+            "remote_crc64": "2599545923747472986",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:46:58.985175+00:00"
+          }
+        },
+        {
+          "path": "data/validation-00000-of-00001.parquet",
+          "size": 21934970,
+          "blob_id": "57326beafdf84be29df99d855e875cfb9ec938d5",
+          "sha256": "abad91f13129fad37dacdcbe470c6b861e358a728d17d5e6d3cb1cd0c8fa5fab",
+          "local_verified": true,
+          "tos_verified": true,
+          "local_deleted": false,
+          "tos_verification": {
+            "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source/data/validation-00000-of-00001.parquet",
+            "size": 21934970,
+            "local_crc64": "14485671505591070746",
+            "remote_crc64": "14485671505591070746",
+            "method": "size_crc64",
+            "verified_at": "2026-09-07T05:47:08.413767+00:00"
+          }
+        }
+      ]
+    }
+  ]
+}

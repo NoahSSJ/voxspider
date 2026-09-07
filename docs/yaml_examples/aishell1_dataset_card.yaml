@@ -1,0 +1,137 @@
+dataset:
+  name: AISHELL-1
+  split: all
+  description: Complete OpenSLR SLR33 AISHELL-1 release archived as the two original
+    provider tar.gz files, including speaker-disjoint train, dev and test audio, transcripts,
+    lexicon and speaker metadata.
+  subsets:
+  - id: train
+    split: train
+    num_samples: 120098
+  - id: dev
+    split: dev
+    num_samples: 14326
+  - id: test
+    split: test
+    num_samples: 7176
+  id: aishell1
+  version: unversioned
+source:
+  owner_type: public
+  source_platform: openslr
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_official_release
+    date: '2026-08-14'
+    description: Copied the two original OpenSLR SLR33 archives from the historical
+      TOS origin after verifying their byte sizes and OpenSLR-published MD5 checksums.
+    recipe_uri: https://www.openslr.org/33/
+  manifests:
+    samples: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/zh/aishell1/source/data_aishell.tgz#data_aishell/transcript/aishell_transcript_v0.8.txt
+data:
+  num_samples: 141600
+  num_recordings: 141925
+  total_duration_hours: 178.97144965277533
+  format:
+    storage: official_archives
+    layout: source/data_aishell.tgz + source/resource_aishell.tgz
+    audio_layout: data_aishell/wav/<speaker>.tar.gz containing train/dev/test WAV
+      files
+    transcript: data_aishell/transcript/aishell_transcript_v0.8.txt
+  audio:
+    sampling_rate: 16000
+    codec: pcm_s16le
+    num_channels: 1
+    bits_per_sample: 16
+  statistics:
+    labeled_splits:
+      train:
+        num_samples: 120098
+        total_duration_hours: 150.8520156076364
+      dev:
+        num_samples: 14326
+        total_duration_hours: 18.0891787847222
+      test:
+        num_samples: 7176
+        total_duration_hours: 10.030255260416723
+    archive_wav_files:
+      train: 120418
+      dev: 14331
+      test: 7176
+      total: 141925
+    unindexed_wav_files:
+      train: 320
+      dev: 5
+      test: 0
+      total: 325
+    legacy_repository_payload:
+      path: test/
+      wav_files: 7176
+      note: Historical test-only WAV view retained in place during the non-destructive
+        full RAW augmentation; it is not added to num_samples, num_recordings or duration
+        totals.
+    archives:
+      data_aishell.tgz:
+        size_bytes: 15582913665
+        md5: 2f494334227864a8a8fec932999db9d8
+        sha256: a4a0313cde0a933e0e01a451f77de0a23d6c942f4694af5bb7f40b9dc38143fe
+      resource_aishell.tgz:
+        size_bytes: 1246920
+        md5: 957d480a0fcac85fc18e550756f624e5
+        sha256: 1a6749854456e9402bc7295767937367afed1327799a5e1df0ed64baa5f77409
+  languages:
+  - language: zh
+    locale: zh-CN
+    duration_hours: 178.97144965277533
+labels:
+  fixed:
+    interaction.type: monologue
+    speaking_style: read
+    device: professional_mic
+  distribution: {}
+  unknown:
+  - scenario.channel
+  - scenario.content_genre
+  - scenario.environment
+  - scenario.product_context
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: true
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - asr_training
+  - asr_evaluation
+  not_recommended_for:
+  - tts_training
+  - voice_cloning
+license: Apache-2.0
+homepage: https://www.openslr.org/33/
+provenance:
+  release: SLR33
+  official_urls:
+  - https://www.openslr.org/resources/33/data_aishell.tgz
+  - https://www.openslr.org/resources/33/resource_aishell.tgz
+  historical_origin: tos://vox-tos-tts-speech/asr/xuecheng/h20/data/zh/aishell/download/
+  legacy_payload:
+    uri: tos://vox-asr-audio-data/speech-data/raw/dataset_repository/asr/zh/aishell1/test/
+    action: retained_unchanged
+    reason: 'R2 uses non-destructive augmentation: complete official archives are
+      added under source/ while the historical test-only WAV view remains for compatibility.'
+  note: The labeled count and durations are derived from the historical Lhotse manifests
+    and match the official train/dev/test transcript inventory. The provider archives
+    contain 325 additional WAV files without canonical transcript entries; these are
+    retained in RAW and explicitly counted.
+generation:
+  generated_at: '2026-08-14T18:05:00+08:00'
+  entrypoint: dataset_download.download interactive ingest
+  args:
+    source: historical TOS origin
+    validation: OpenSLR MD5 plus complete tar member listing and Lhotse manifest reconciliation
+schema_version: speech_dataset_spec_v1.2
+status: raw

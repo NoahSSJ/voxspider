@@ -8,20 +8,41 @@ loader:
 
 
 datasets:
-  - name: "弱智吧语录"
-    repo_id: "TCDATA/ruozhiba"
-    url: "https://huggingface.co/datasets/TCDATA/ruozhiba"
+  # - name: "弱智吧语录"
+  #   repo_id: "TCDATA/ruozhiba"
+  #   url: "https://huggingface.co/datasets/TCDATA/ruozhiba"
+  #   enabled: false
+  #   status: false
+
+  # - name: "史上最烂小说开头"
+  #   repo_id: "venkatasg/bulwer-lytton"
+  #   url: "https://huggingface.co/datasets/venkatasg/bulwer-lytton"
+  #   enabled: false
+  #   status: false
+
+  # - name: "有趣的 AI 角色提示词"
+  #   repo_id: "fka/prompts.chat"
+  #   url: "https://huggingface.co/datasets/fka/prompts.chat"
+  #   enabled: false
+  #   status: false
+
+  - name: "synth-qa-taste-codec-chat"
+    repo_id: "yilele/synth-qa-taste-codec-chat"
+    url: "https://huggingface.co/datasets/yilele/synth-qa-taste-codec-chat"
+    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source"
+    enabled: true
+    status: true
+
+  - name: "WorldSpeech"
+    repo_id: "disco-eth/WorldSpeech"
+    url: "https://huggingface.co/datasets/disco-eth/WorldSpeech/tree/main"
+    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/source"
     enabled: true
     status: false
 
-  - name: "史上最烂小说开头"
-    repo_id: "venkatasg/bulwer-lytton"
-    url: "https://huggingface.co/datasets/venkatasg/bulwer-lytton"
-    enabled: false
-    status: false
-
-  - name: "有趣的 AI 角色提示词"
-    repo_id: "fka/prompts.chat"
-    url: "https://huggingface.co/datasets/fka/prompts.chat"
-    enabled: false
+  - name: 'OpenDialog'
+    repo_id: 'k2-fsa/OpenDialog'
+    url: 'https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/main'
+    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source"
+    enabled: true
     status: false

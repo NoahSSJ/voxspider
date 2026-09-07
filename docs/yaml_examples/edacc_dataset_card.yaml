@@ -1,0 +1,36 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: edacc
+  name: edacc
+  version: source
+  split: all
+  description: 40+ 口音双人 Zoom 对话
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation: []
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: en
+    locale: en
+provenance:
+  repo: edinburghcstr/edacc
+  note: 40+ 口音双人 Zoom 对话
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - speaker
+  availability:
+    transcript: true
+usage:
+  intended_use:
+  - asr_evaluation
+  not_recommended_for: []

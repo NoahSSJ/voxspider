@@ -1,0 +1,4 @@
+interface:
+  display_name: "TOS 数据集状态查询"
+  short_description: "只读查询数据集文件完整性、远端校验、数据集卡与历史归档登记状态"
+  default_prompt: "使用 $tos-dataset-status-auditor 查询本项目 TOS 数据集的上传、全量对账、CRC64、数据集卡和 archived.json 登记状态，不修改数据。"

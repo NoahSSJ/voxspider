@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dataset Card YAML Generator"
+  short_description: "Generate evidence-backed speech dataset card YAML"
+  default_prompt: "Use $dataset-card-generator to generate and validate a dataset_card.yaml from this downloaded dataset."

@@ -1,0 +1,135 @@
+dataset:
+  name: AISHELL-4
+  split: all
+  description: Complete AISHELL-4 OpenSLR SLR111 release with train_L, train_M, train_S and test partitions,
+    preserving the published 8-channel FLAC recordings, TextGrid transcripts and RTTM diarization annotations.
+  id: aishell4
+  version: unversioned
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream:
+  - id: openslr-slr111
+    type: external_dataset
+    description: Authoritative AISHELL-4 release page and archives.
+    uri: https://www.openslr.org/111/
+  - id: AISHELL/AISHELL-4
+    type: external_snapshot
+    description: Pinned initial transfer snapshot; incomplete direct-RAW inventory (203 FLAC, 150 TextGrid,
+      150 RTTM).
+    uri: https://huggingface.co/datasets/AISHELL/AISHELL-4/tree/aada72727856313b19d4a030383c426364931dbf
+  - id: shenyunhang/AISHELL-4
+    type: external_snapshot
+    description: Pinned completion transfer snapshot; only the 130 absent direct-RAW objects were added.
+    uri: https://huggingface.co/datasets/shenyunhang/AISHELL-4/tree/df062e4993eeb9873605f8c74d6fac1db0560799
+  derivation:
+  - step: upstream_snapshot
+    description: Stored the pinned initial direct-RAW snapshot without content conversion; provider cache
+      files were excluded.
+    date: '2026-08-17'
+  - step: missing_payload_augmentation
+    description: Added exactly 130 previously absent direct-RAW objects from the pinned completion transfer
+      snapshot; no existing payload was overwritten or removed.
+    date: '2026-08-18'
+  manifests:
+    samples: null
+data:
+  num_samples: 211
+  num_recordings: 211
+  total_duration_hours: 120.252992
+  audio:
+    sampling_rate: 16000
+    codec: flac
+    num_channels: 8
+  languages:
+  - language: zh
+    locale: zh-CN
+    duration_hours: 120.252992
+  statistics:
+    duration_basis: Sum of FLAC STREAMINFO durations for all 211 stored multichannel recording containers.
+    partitions:
+      train_L:
+        split: train
+        recording_files: 30
+        duration_hours: 16.804652
+      train_M:
+        split: train
+        recording_files: 108
+        duration_hours: 59.955441
+      train_S:
+        split: train
+        recording_files: 53
+        duration_hours: 30.767595
+      test:
+        split: test
+        recording_files: 20
+        duration_hours: 12.725304
+    source_inventory:
+      objects: 635
+      bytes: 51964311082
+      flac_files: 211
+      textgrid_files: 211
+      rttm_files: 211
+labels:
+  fixed:
+    interaction.type: multi_party
+    speaking_style: spontaneous
+    scenario.content_genre: meeting
+    acoustic:
+    - far_field
+    - reverberation
+    - overlap
+    device: microphone_array
+  distribution:
+    speaker: {}
+    scenario.environment: {}
+  unknown:
+  - domain
+  availability:
+    transcript: true
+    timestamps: true
+    speaker_labels: true
+    diarization: true
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - asr_training
+  - asr_evaluation
+  - speaker_diarization
+  not_recommended_for:
+  - tts_training
+  - voice_cloning
+access:
+  license: CC BY-SA 4.0
+  requires_auth: false
+  homepage: https://www.openslr.org/111/
+  note: OpenSLR SLR111 states CC BY-SA 4.0, while the pinned Hugging Face repository declares Apache-2.0;
+    this Card records the more restrictive published term pending publisher clarification.
+provenance:
+  authority:
+    repo: OpenSLR
+    release: SLR111
+    homepage: https://www.openslr.org/111/
+  transfer_sources:
+  - repo: AISHELL/AISHELL-4
+    revision: aada72727856313b19d4a030383c426364931dbf
+    role: initial_snapshot
+  - repo: shenyunhang/AISHELL-4
+    revision: df062e4993eeb9873605f8c74d6fac1db0560799
+    role: missing_payload_augmentation
+  scope: 'Complete direct RAW: 211 FLAC, 211 TextGrid and 211 RTTM; generated txt/ and segmented wav/
+    mirror artifacts are excluded.'
+generation:
+  generated_at: '2026-08-18T01:17:50.288982+00:00'
+  entrypoint: dataset_download.download.cli
+  args:
+    workflow_mode: refresh_existing
+    run_id: aishell4-raw-repair-20260817
+    augmentation_objects: 130
+    no_overwrite: true
+    no_delete: true
+schema_version: speech_dataset_spec_v1.2
+status: raw

@@ -1,0 +1,44 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: ofrom
+  name: ofrom
+  version: source
+  split: all
+  description: 瑞士罗曼地区法语自发口语。官方【无 train/test 划分】,我们自建 8:2(按录音-说话人连通分量切,说话人互斥),划分冻结在
+    eval_groups/ofrom_split.json。⚠ 每说话人 6 个 tier,只有不含 '[' 的那个是转写,其余是 DisMo 分词/词性/词元
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation: []
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: fr
+    locale: fr
+provenance:
+  download_url: https://ofrom.unine.ch/index.php?page=t%C3%A9l%C3%A9chargements
+  note: 瑞士罗曼地区法语自发口语。官方【无 train/test 划分】,我们自建 8:2(按录音-说话人连通分量切,说话人互斥),划分冻结在 eval_groups/ofrom_split.json。⚠
+    每说话人 6 个 tier,只有不含 '[' 的那个是转写,其余是 DisMo 分词/词性/词元
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - speaker
+  availability:
+    transcript: true
+usage:
+  intended_use:
+  - asr_evaluation
+  not_recommended_for: []
+generation:
+  generated_at: '2026-08-07T20:53:03'
+  git_commit: 538fb1628efc19f83e6c12ec9f2d04b460e925ab
+  entrypoint: python scripts/gen_dataset_cards.py
+  args: --src /dev/shm/eval_datasets --out /home/hengyaobao/eval_data_build/cards_ofrom
+    --langs fr
