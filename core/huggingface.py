@@ -2,9 +2,14 @@ from datetime import datetime, timezone
 import threading
 from typing import Any
 import subprocess
+import os
+
+# huggingface_hub 在导入时读取超时配置，单位为秒。
+os.environ["HF_HUB_DOWNLOAD_TIMEOUT"] = "300"
+os.environ["HF_HUB_ETAG_TIMEOUT"] = "60"
+
 from huggingface_hub import HfApi, hf_hub_download, snapshot_download, RepoFile
 import sys
-import os
 import json
 import shutil
 from pprint import pprint
@@ -21,6 +26,13 @@ import re
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import deque
+from contextlib import closing
+
+if __package__:
+    from . import archive_state
+else:
+    import archive_state
 
 def get_root_dir():
     current_dir = Path(__file__).parent.resolve()
@@ -30,6 +42,8 @@ def get_root_dir():
     raise RuntimeError("错误")
 
 root_dir = get_root_dir()
+# 显式加载项目配置；已导出的环境变量优先。
+load_dotenv(root_dir / ".env", override=False)
 yaml_path = (root_dir / "config").joinpath('hgf.yaml')
 # print(root_dir)
 def setup_logger(dataset_name: str = "test"):
@@ -59,17 +73,27 @@ log = setup_logger()
 
 
 class HuggingfaceSpider():
-    def __init__(self, dataset: dict[str, Any]):
+    _space_lock = threading.Lock()
+    _reserved_bytes = 0
+
+    def __init__(self, dataset: dict[str, Any], loader=None):
+        loader = loader or {}
         self.max_workers = 3
-        self.endpoint = "https://huggingface.co"
-        self.download_workers = 8
+        self.endpoint = loader.get("endpoint", "https://huggingface.co")
+        self.download_workers = loader.get("download_workers", 8)
+        self.reserve_bytes = loader.get("reserve_bytes", 1024**3)
+        if type(self.download_workers) is not int or self.download_workers < 1:
+            raise ValueError("download_workers must be a positive integer")
+        if type(self.reserve_bytes) is not int or self.reserve_bytes < 0:
+            raise ValueError("reserve_bytes must be a nonnegative integer")
         self.retry_base_time = 10
         self.repo_id = dataset['repo_id']
         self.repo_type = "dataset"
         self.save_name = dataset['name']
         self.save_dir: Path = root_dir / "datasets" / self.save_name
         self.save_dir.mkdir(parents=True, exist_ok=True)
-        self.api = HfApi(endpoint=self.endpoint, token=os.getenv("HF_TOKEN"))
+        self.token = os.getenv("HF_TOKEN")
+        self.api = HfApi(endpoint=self.endpoint, token=self.token)
         self.tos_url = dataset['tos_url']
     
     
@@ -103,6 +127,7 @@ class HuggingfaceSpider():
             if not repo_dict.get("commit_id"):
                 raise ValueError("清单缺少 commit_id")
 
+            archive_state.initialize(repo_dict)
             for item in repo_dict["file_manifest"]:
                 item.setdefault("local_verified", False)
                 item.setdefault("tos_verified", False)
@@ -111,12 +136,12 @@ class HuggingfaceSpider():
             self.save_manifest(repo_dict)
             return repo_dict  # 这里不能漏
         
-        repo_dict = {}
+        repo_dict = dict(archive_state.DEFAULTS)
         info = self.api.dataset_info(self.repo_id)
         pprint(info)
         id = info.id
         author = info.author
-        card_data = info.card_data.to_dict()
+        card_data = info.card_data.to_dict() if info.card_data is not None else {}
         language = card_data.get('language')
         license = card_data.get('license')
         task_categories = card_data.get('task_categories')
@@ -181,27 +206,145 @@ class HuggingfaceSpider():
         self.save_manifest(repo_dict)
         return repo_dict
 
-    def download_file(self):
-        repo_dict = self.get_manifest()
-        commit_id = repo_dict['commit_id']
+    def source_path(self, item):
+        path = item['path']
+        relative = PurePosixPath(path)
+        if (not path or relative.is_absolute() or '..' in relative.parts
+                or str(relative) != path or '\\' in path
+                or relative.parts[0] in {'.cache', 'repo_manifest.json',
+                    'repo_manifest.json.tmp', 'dataset_card.yaml',
+                    'source_reconciliation.json', 'archive_report.json',
+                    'card_statistics.json', 'upstream_evidence.json',
+                    '.archive.lock', 'card_generation_decision.json',
+                    'card_publication.json', 'card_generation_report.json'}):
+            raise ValueError(f"不能下载或清理管理文件/非法路径: {path!r}")
+        file_path = self.save_dir / path
+        # 不跟随符号链接，也不允许通过父目录链接删除工作目录外的文件。
+        if any(part.is_symlink() for part in (file_path, *file_path.parents)):
+            raise ValueError(f"不能清理符号链接路径: {file_path}")
+        if file_path.exists() and not file_path.is_file():
+            raise ValueError(f"本地路径不是普通文件: {file_path}")
+        return file_path
+
+    def can_resume_remote(self, item, commit_id):
+        # 续跑复用清单中的完整核验记录；远端全量复核留给最终交付。
+        self.source_path(item)
+        size = item['size']
+        remote_path = f"{self.tos_url.rstrip('/')}/{item['path']}"
+        identity = dict(repo_id=self.repo_id, commit_id=commit_id,
+                        **{key: item[key] for key in ('path', 'size', 'sha256', 'blob_id')})
+        previous = item.get("tos_verification") or {}
+        return (
+            item.get("local_verified") is True
+            and item.get("tos_verified") is True
+            and previous.get("identity") == identity
+            and previous.get("uri") == remote_path
+            and previous.get("size") == size
+            and previous.get("method") == "size_crc64"
+            and isinstance(previous.get("local_crc64"), str)
+            and re.fullmatch(r"\d+", previous["local_crc64"]) is not None
+            and previous.get("remote_crc64") == previous["local_crc64"]
+        )
+
+    def prefetch(self, repo_dict):
         items = repo_dict['file_manifest']
+        seen = set()
+        for item in items:
+            self.source_path(item)
+            if item['path'] in seen or type(item['size']) is not int or item['size'] < 0:
+                raise ValueError("Duplicate source path or invalid file size")
+            seen.add(item['path'])
+        pending = deque()
+        cursor = 0
+        reserved = 0
+        log.info("Download prefetch workers: %s", self.download_workers)
+        try:
+            with ThreadPoolExecutor(max_workers=self.download_workers) as executor:
+                try:
+                    while cursor < len(items) or pending:
+                        while cursor < len(items) and len(pending) < self.download_workers:
+                            item = items[cursor]
+                            resume = self.can_resume_remote(item, repo_dict['commit_id'])
+                            local_path = self.source_path(item)
+                            local_ready = local_path.exists() and local_path.stat().st_size == item['size']
+                            # Existing files are verified by the consumer before upload.
+                            download_needed = not resume and not local_ready
+                            # Reserve full sizes across datasets, including partial caches.
+                            needed = item['size'] if download_needed else 0
+                            with HuggingfaceSpider._space_lock:
+                                available = (shutil.disk_usage(self.save_dir).free
+                                             - HuggingfaceSpider._reserved_bytes - self.reserve_bytes)
+                                if needed and needed > available:
+                                    if pending:
+                                        break
+                                    raise OSError(f"Insufficient download space: {item['path']}")
+                                HuggingfaceSpider._reserved_bytes += needed
+                                reserved += needed
+                            future = None if not download_needed else executor.submit(
+                                hf_hub_download, repo_id=self.repo_id, filename=item['path'],
+                                repo_type='dataset', revision=repo_dict['commit_id'],
+                                local_dir=self.save_dir, endpoint=self.endpoint, token=self.token)
+                            pending.append((item, future, needed))
+                            cursor += 1
+                        item, future, needed = pending.popleft()
+                        if future is not None:
+                            future.result()
+                        yield item
+                        with HuggingfaceSpider._space_lock:
+                            HuggingfaceSpider._reserved_bytes -= needed
+                            reserved -= needed
+                finally:
+                    for _, future, _ in pending:
+                        if future is not None:
+                            future.cancel()
+        finally:
+            # Active downloads finish before their space reservations are released.
+            with HuggingfaceSpider._space_lock:
+                HuggingfaceSpider._reserved_bytes -= reserved
+
+    def download_file(self):
+        # 下载器与交付任务共用锁；锁定后才读取清单，避免覆盖其他阶段的新状态。
+        with archive_state.dataset_lock(self.save_dir, self.tos_url):
+            repo_dict = self.get_manifest()
+            changed = archive_state.initialize(repo_dict)
+            complete = archive_state.transfer_complete(repo_dict, self.tos_url)
+            if repo_dict['status'] is True and complete:
+                for item in repo_dict['file_manifest']:
+                    local_path = self.source_path(item)
+                    if not item.get('local_deleted') and not local_path.exists():
+                        item['local_deleted'] = True
+                        changed = True
+                if changed:
+                    self.save_manifest(repo_dict)
+                log.info("清单已标记文件传输完成: %s", self.repo_id)
+                return
+            if not complete:
+                repo_dict['status'] = False
+                archive_state.invalidate_delivery(repo_dict)
+                self.save_manifest(repo_dict)
+            try:
+                with closing(self.prefetch(repo_dict)) as items:
+                    self.process_downloads(repo_dict, items)
+            finally:
+                # 本地清理失败不抹去已完成的两端校验事实。
+                complete = archive_state.transfer_complete(repo_dict, self.tos_url)
+                if repo_dict.get('status') is not complete:
+                    repo_dict['status'] = complete
+                    self.save_manifest(repo_dict)
+
+    def process_downloads(self, repo_dict, items):
+        commit_id = repo_dict['commit_id']
         for index, item in enumerate(items, start=1):
+            if self.can_resume_remote(item, commit_id):
+                # 处理删除成功但删除状态尚未保存就退出的情况。
+                if not item.get("local_deleted") and not self.source_path(item).exists():
+                    item["local_deleted"] = True
+                    self.save_manifest(repo_dict)
+                log.info("复用清单核验记录，跳过已完成文件: %s", item['path'])
+                continue
             print(f"index:{index}, item:{item}")
             path = item['path']
-            relative = PurePosixPath(path)
-            if (not path or relative.is_absolute() or '..' in relative.parts
-                    or str(relative) != path or '\\' in path
-                    or relative.parts[0] in {'.cache', 'repo_manifest.json',
-                        'repo_manifest.json.tmp', 'dataset_card.yaml',
-                        'source_reconciliation.json', 'archive_report.json',
-                        'card_statistics.json', 'upstream_evidence.json'}):
-                raise ValueError(f"不能下载或清理管理文件/非法路径: {path!r}")
-            file_path = self.save_dir / path
-            # 不跟随符号链接，也不允许通过父目录链接删除工作目录外的文件。
-            if any(part.is_symlink() for part in (file_path, *file_path.parents)):
-                raise ValueError(f"不能清理符号链接路径: {file_path}")
-            if file_path.exists() and not file_path.is_file():
-                raise ValueError(f"本地路径不是普通文件: {file_path}")
+            file_path = self.source_path(item)
             size = item['size']
             blob_id = item['blob_id']
             sha256 = item['sha256']
@@ -210,70 +353,44 @@ class HuggingfaceSpider():
                 "repo_id": self.repo_id, "commit_id": commit_id,
                 "path": path, "size": size, "sha256": sha256, "blob_id": blob_id,
             }
-            previous = item.get("tos_verification") or {}
-            resume_remote = (
-                not file_path.exists()
-                and item.get("local_verified") is True
-                and item.get("tos_verified") is True
-                and previous.get("identity") == identity
-                and previous.get("uri") == remote_path
-                and previous.get("size") == size
-                and previous.get("method") == "size_crc64"
-                and isinstance(previous.get("local_crc64"), str)
-                and re.fullmatch(r"\d+", previous["local_crc64"]) is not None
-                and previous.get("remote_crc64") == previous["local_crc64"]
-            )
-            if resume_remote:
-                local_crc64 = int(previous["local_crc64"])
-                log.info("本地文件已清理，重新核验远端后跳过下载: %s", path)
+            item['local_verified'] = False
+            item['local_deleted'] = False
+            self.save_manifest(repo_dict)
+            log.info("Download completed - local_path:%s", self.save_dir)
+            file_path = self.save_dir / path
+            actual_size = file_path.stat().st_size
+            if actual_size != size:
+                raise ValueError(f"File size mismatch for {file_path}: expected {size}, got {actual_size}")
             else:
-                item['local_verified'] = False
-                item['local_deleted'] = False
-                self.save_manifest(repo_dict)
-                # download the file
-                flag = hf_hub_download(
-                    repo_id=self.repo_id, 
-                    filename=path, 
-                    repo_type="dataset",
-                    revision=commit_id,
-                    local_dir=self.save_dir,
-                    endpoint=self.endpoint,
-                )
-                log.info("Download completed - local_path:%s", self.save_dir)
-                file_path = self.save_dir / path
-                actual_size = file_path.stat().st_size
-                if actual_size != size:
-                    raise ValueError(f"File size mismatch for {file_path}: expected {size}, got {actual_size}")
+                log.info(f"File size verified for {file_path}: {actual_size} bytes")
+            if sha256:
+                # file_bytes = Path(file_path).read_bytes()
+                # file_hash = hashlib.sha256(file_bytes).hexdigest()
+                with Path(file_path).open('rb') as f:
+                    file_hash = hashlib.file_digest(f, "sha256").hexdigest()
+                if file_hash != sha256:
+                    raise ValueError(f"SHA256 mismatch for {file_path}: expected {sha256}, got {file_hash}")
                 else:
-                    log.info(f"File size verified for {file_path}: {actual_size} bytes")
-                if sha256:
-                    # file_bytes = Path(file_path).read_bytes()
-                    # file_hash = hashlib.sha256(file_bytes).hexdigest()
-                    with Path(file_path).open('rb') as f:
-                        file_hash = hashlib.file_digest(f, "sha256").hexdigest()
-                    if file_hash != sha256:
-                        raise ValueError(f"SHA256 mismatch for {file_path}: expected {sha256}, got {file_hash}")
-                    else:
-                        log.info(f"SHA256 verified for {file_path}: {file_hash}")
-                elif blob_id:
-                    git_hash = hashlib.sha1()
-                    git_hash.update(f"blob {actual_size}\0".encode("ascii"))
-                    with file_path.open("rb") as f:
-                        while chunk := f.read(1024 * 1024):
-                            git_hash.update(chunk)
-                    actual_blob_id = git_hash.hexdigest()
-                    if actual_blob_id != blob_id:
-                        raise ValueError(
-                            f"Blob ID mismatch: expected {blob_id}, got {actual_blob_id}"
-                        )
-                    else:
-                        log.info(f"blob_id verified for {file_path}: {actual_blob_id}")
-                item["local_verified"] = True
-                self.save_manifest(repo_dict)
-                log.info(f"Successfully downloaded and verified file: {file_path}")
-                local_stat = file_path.stat()
-                local_signature = (local_stat.st_dev, local_stat.st_ino, local_stat.st_size,
-                                   local_stat.st_mtime_ns, local_stat.st_ctime_ns)
+                    log.info(f"SHA256 verified for {file_path}: {file_hash}")
+            elif blob_id:
+                git_hash = hashlib.sha1()
+                git_hash.update(f"blob {actual_size}\0".encode("ascii"))
+                with file_path.open("rb") as f:
+                    while chunk := f.read(1024 * 1024):
+                        git_hash.update(chunk)
+                actual_blob_id = git_hash.hexdigest()
+                if actual_blob_id != blob_id:
+                    raise ValueError(
+                        f"Blob ID mismatch: expected {blob_id}, got {actual_blob_id}"
+                    )
+                else:
+                    log.info(f"blob_id verified for {file_path}: {actual_blob_id}")
+            item["local_verified"] = True
+            self.save_manifest(repo_dict)
+            log.info(f"Successfully downloaded and verified file: {file_path}")
+            local_stat = file_path.stat()
+            local_signature = (local_stat.st_dev, local_stat.st_ino, local_stat.st_size,
+                               local_stat.st_mtime_ns, local_stat.st_ctime_ns)
             remote_path = f"{self.tos_url.rstrip('/')}/{path}"
             if item.get("local_verified") is not True:
                 raise RuntimeError(f"文件尚未通过本地核验: {file_path}")
@@ -283,32 +400,31 @@ class HuggingfaceSpider():
             self.save_manifest(repo_dict)
                 
             try:
-                if not resume_remote:
-                    # 1. 计算已经通过本地核验的文件的 CRC64
-                    hash_result = subprocess.run(
-                        ["tosutil", "hash", str(file_path), "-type=crc64"],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT,
-                        text=True,
-                        check=False,
+                # 1. 计算已经通过本地核验的文件的 CRC64
+                hash_result = subprocess.run(
+                    ["tosutil", "hash", str(file_path), "-type=crc64"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    check=False,
+                )
+
+                if hash_result.returncode != 0:
+                    raise RuntimeError(
+                        f"计算本地 CRC64 失败:\n{hash_result.stdout}"
                     )
 
-                    if hash_result.returncode != 0:
-                        raise RuntimeError(
-                            f"计算本地 CRC64 失败:\n{hash_result.stdout}"
-                        )
-
-                    crc_match = re.search(
-                        r"^\s*crc64:\s*(\d+)\s*$",
-                        hash_result.stdout,
-                        flags=re.MULTILINE | re.IGNORECASE,
+                crc_match = re.search(
+                    r"^\s*crc64:\s*(\d+)\s*$",
+                    hash_result.stdout,
+                    flags=re.MULTILINE | re.IGNORECASE,
+                )
+                if crc_match is None:
+                    raise RuntimeError(
+                        f"无法解析本地 CRC64:\n{hash_result.stdout}"
                     )
-                    if crc_match is None:
-                        raise RuntimeError(
-                            f"无法解析本地 CRC64:\n{hash_result.stdout}"
-                        )
 
-                    local_crc64 = int(crc_match.group(1))
+                local_crc64 = int(crc_match.group(1))
 
                 # 2. 最多查询两次：
                 # 第一次检查目标是否存在；不存在则上传，再查询一次。
@@ -391,11 +507,6 @@ class HuggingfaceSpider():
                             f"上传完成后仍查询不到目标对象: {remote_path}"
                         )
 
-                    if resume_remote:
-                        # 本地已删除但远端丢失：保持 tos_verified=false，显式失败。
-                        # 下次重跑会进入正常下载流程，不会把旧状态当成功。
-                        raise RuntimeError(f"已清理文件的远端对象缺失，需要重新下载: {remote_path}")
-
                     # 4. 目标明确不存在，上传并开启传输一致性校验
                     upload_result = subprocess.run(
                         [
@@ -433,22 +544,21 @@ class HuggingfaceSpider():
                 log.info("TOS 单文件核验通过: %s", remote_path)
 
                 # 6. 远端核验结果持久保存后，才删除确切的本地源文件。
-                if not resume_remote:
-                    if any(part.is_symlink() for part in (file_path, *file_path.parents)):
-                        raise ValueError(f"清理前发现符号链接: {file_path}")
-                    current = file_path.stat()
-                    signature = (current.st_dev, current.st_ino, current.st_size,
-                                 current.st_mtime_ns, current.st_ctime_ns)
-                    if signature != local_signature:
-                        item["local_verified"] = False
-                        self.save_manifest(repo_dict)
-                        raise RuntimeError(f"本地文件在核验后发生变化，保留不删: {file_path}")
-                    file_path.unlink()
-                    directory_fd = os.open(file_path.parent, os.O_RDONLY | os.O_DIRECTORY)
-                    try:
-                        os.fsync(directory_fd)
-                    finally:
-                        os.close(directory_fd)
+                if any(part.is_symlink() for part in (file_path, *file_path.parents)):
+                    raise ValueError(f"清理前发现符号链接: {file_path}")
+                current = file_path.stat()
+                signature = (current.st_dev, current.st_ino, current.st_size,
+                             current.st_mtime_ns, current.st_ctime_ns)
+                if signature != local_signature:
+                    item["local_verified"] = False
+                    self.save_manifest(repo_dict)
+                    raise RuntimeError(f"本地文件在核验后发生变化，保留不删: {file_path}")
+                file_path.unlink()
+                directory_fd = os.open(file_path.parent, os.O_RDONLY | os.O_DIRECTORY)
+                try:
+                    os.fsync(directory_fd)
+                finally:
+                    os.close(directory_fd)
                 item["local_deleted"] = True
                 self.save_manifest(repo_dict)
                 log.info("本地文件已清理，继续下一个文件: %s", file_path)
@@ -543,6 +653,7 @@ class DatasetScheduler:
 
         # 已经执行结束的任务
         self.finished = set()
+        self.retry_after = {}
 
     def reload_config(self):
         self.datasets = SpiderConfig.get_datasets()
@@ -554,12 +665,15 @@ class DatasetScheduler:
                 continue
 
             del self.running[repo_id]
-            self.finished.add(repo_id)
-
             try:
                 future.result()
+                self.finished.add(repo_id)
                 log.info("数据集下载完成: %s", repo_id)
+            except archive_state.LockBusyError as exc:
+                self.retry_after[repo_id] = time.monotonic() + 30
+                log.warning("数据集锁被其他任务占用，30 秒后重试: %s (%s)", repo_id, exc.filename)
             except Exception:
+                self.finished.add(repo_id)
                 log.exception("数据集下载失败: %s", repo_id)
 
     def submit_tasks(self, executor):
@@ -578,14 +692,18 @@ class DatasetScheduler:
             if repo_id in self.finished:
                 continue
 
+            if time.monotonic() < self.retry_after.get(repo_id, 0):
+                continue
+
             # 使用提交时的配置副本。
             # 任务提交后再修改 YAML，不会影响正在下载的任务。
             future = executor.submit(
                 HuggingfaceSpider(
-                    dataset=dataset.copy()
+                    dataset=dataset.copy(), loader=self.loader.copy()
                 ).download_file
             )
 
+            self.retry_after.pop(repo_id, None)
             self.running[repo_id] = future
             free_workers -= 1
 

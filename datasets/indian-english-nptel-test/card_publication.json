@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/dataset_card.yaml",
+  "size": 4282,
+  "crc64": "15482246005638246180",
+  "sha256": "128beb79af89f57669c575f8dd15636279a4f443989b547fbeb032c0e49bab40",
+  "verified_at": "2026-09-15T03:15:06.438834+00:00"
+}

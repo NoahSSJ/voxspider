@@ -1,0 +1,15 @@
+{
+  "source": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/ /",
+  "destination": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/",
+  "count": 253,
+  "bytes": 811844478396,
+  "started_at": "2026-09-21T02:06:16.482691+00:00",
+  "copied": 253,
+  "deleted": 0,
+  "phase": "destination_verified_source_delete_denied",
+  "destination_verified": true,
+  "source_remaining_count": 253,
+  "preserved_unrelated_count": 205,
+  "checked_at": "2026-09-21T02:25:30.595435+00:00",
+  "error": "TOS DeleteObject returned 403 AccessDenied (0003-00000012); no source objects deleted"
+}

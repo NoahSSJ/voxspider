@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "operation": "register",
+  "checked_at": "2026-09-09T02:27:13.635980+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-09-09T02:28:17.680663+00:00",
+    "repo_id": "disco-eth/WorldSpeech",
+    "commit_id": "7fc2c2f19528b3d3972110a04e500098f6fc7f24",
+    "manifest_sha256": "ea4bb4b4d81ec8ba0a3991a7c013f1cd0add40379b8b1df015a0c0d82e31964a",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/source/",
+    "expected_count": 14238,
+    "listed_count": 14238,
+    "du_count": 14238,
+    "expected_bytes": 1716577687331,
+    "checked_bytes": 1716577687331,
+    "du_bytes": 1716577687331,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  },
+  "card_verification": {
+    "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/dataset_card.yaml",
+    "size": 48716,
+    "crc64": "2462168000129271119",
+    "sha256": "a981578014b09738f7a37dcf1e5d76be9f18a96b8827ddc2f77df40f6c7cc967",
+    "verified_at": "2026-09-09T02:28:17.808842+00:00"
+  },
+  "registry": "/home/shuxianzhong/voxspider/archived.json",
+  "registered_manifest_sha256": "c4c7a317e810b513837112ab2ec69fae0532a5c9bcb5ac4fa0647f33cd423ad1"
+}

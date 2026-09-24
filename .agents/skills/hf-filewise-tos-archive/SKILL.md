@@ -1,9 +1,21 @@
 ---
 name: hf-filewise-tos-archive
-description: 在 voxspider 中按固定 Hugging Face commit 逐文件下载、本地核验、上传 TOS 和远端核验，执行不依赖完整本地快照的全量对账，生成并最后发布 raw 数据集卡，再将完整 repo_manifest.json 登记到 archived.json。用于本项目的数据集归档、续跑、交付和状态核查；核验结果持久保存后清理单个本地源文件。
+description: 在 voxspider 中完成 Hugging Face 固定 commit 逐文件归档、全量对账、raw 数据集卡生成发布与清单登记；也用于按 GitHub README 或 OpenSLR 数据集主页生成 raw 数据集卡，后两者不要求持久化归档清单。
 ---
 
-# Hugging Face 逐文件归档与交付
+# 数据集卡生成与 Hugging Face 逐文件归档
+
+## 按来源选择流程
+
+- **Hugging Face**：继续阅读下文，固定 commit、持久化清单、逐文件核验、CRC64、全量对账、卡片最后发布和登记要求全部保持不变。
+- **GitHub**：读取 [GitHub / OpenSLR 数据集卡](references/github-openslr-card.md)，以指定仓库的 README 为主要依据生成卡片。
+- **OpenSLR**：读取 [GitHub / OpenSLR 数据集卡](references/github-openslr-card.md)，以对应数据集主页为主要依据生成卡片。
+
+GitHub / OpenSLR 不要求创建或持久化 `repo_manifest.json`，不要求 `card_data`、HF commit、HF 格式 CRC64 记录或 `archived.json` 登记，也不调用本技能的 `reconcile/register` 脚本。生成本地卡片不以传输完成为前提；发布时按该来源说明确认实际传输状态。GitHub README 指向 Zenodo 等文件托管站时，仍可按 GitHub 分支制作卡片，并如实记录文件来源；实际归档的是 HF 镜像时使用 HF 分支。
+
+以下各节及 `references/transfer-state.md`、`references/card-and-publication.md` 专用于 Hugging Face。现有 `docs/archive-card-task.md` 和定时调度器仍是 HF 任务入口，本次新增分支不表示已接入其自动调度。
+
+## Hugging Face 逐文件归档与交付
 
 本 skill 面向当前 voxspider 项目，不调用 `cankao/` 的旧项目脚本。所有项目路径以包含 `core/huggingface.py`、`config/hgf.yaml` 和 `docs/open-dataset-ingestion-handbook.md` 的目录为根；本 skill 的脚本相对于本文件所在目录。
 

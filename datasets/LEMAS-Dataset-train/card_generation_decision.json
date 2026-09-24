@@ -1,0 +1,1 @@
+{"outcome":"retry","reason":"执行环境故障：读取必需技能文件时，沙箱启动失败，报错 bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted。无法读取技能、证据或审查卡片；未修改任何文件或远端对象。请修复执行环境后重试。"}

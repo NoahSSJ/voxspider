@@ -1,0 +1,124 @@
+schema_version: speech_dataset_spec_v1.2
+
+dataset:
+  id: kespeech
+  name: KeSpeech
+  version: unversioned
+  split: all
+  description: >-
+    中文朗读语音数据集，含普通话及北京、西南、中原、东北、兰银、江淮、冀鲁、胶辽八种官话次方言。
+    本卡描述已归档的九个原始压缩分卷，统计采用 NeurIPS 2021 论文声明。
+  subsets_note: >-
+    Audio、Metadata、Tasks 为上游目录；ASR、说话人验证、次方言识别任务复用音频，不能作为互斥子集相加。
+
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+
+lineage:
+  upstream: []
+  derivation:
+    - step: archive_original_split_archive
+      description: >-
+        从 ModelScope pengzhendong/KeSpeech 镜像下载 KeSpeech.tar.gz.aa 至 .ai，
+        按原始分卷文件名归档到 TOS，未做音频转换。
+        当前 source/ 仅有九个分卷，GitHub README 和许可文件未作为独立对象归档。
+      recipe_uri: https://www.modelscope.cn/datasets/pengzhendong/KeSpeech
+  manifests:
+    samples: null
+
+data:
+  num_samples: 976054
+  total_duration_hours: 1542
+  languages:
+    - language: zh
+      locale: zh-CN
+      duration_hours: 1542
+  format:
+    storage: split_tar_gz
+    layout: 'KeSpeech.tar.gz.aa 至 .ai；上游包内为 KeSpeech/{Audio,Metadata,Tasks}/，音频为 16 kHz WAV。'
+    text_column: 'Kaldi 风格 text 文件中的转写字段'
+  statistics:
+    statistics_basis: '论文 §3.3–3.5、表 2 及 §4.1；官方声明，未在本次遍历音频实测。'
+    num_speakers: 27237
+    num_cities: 34
+    archived_files: 9
+    archived_size_bytes: 144387352346
+    splits:
+      train: {num_samples: null, total_duration_hours: null}
+      dev: {num_samples: null, total_duration_hours: null, num_speakers: 100}
+      test: {num_samples: null, total_duration_hours: null, num_speakers: 2000}
+    splits_note: >-
+      此处 split 指 ASR 任务；论文 §4.1 给出 dev/test 说话人数，未列出各 split 的样本数和时长。
+      应使用上游 Tasks/ASR 的划分，当前未解包核对其样本清单。
+    annotation_note: >-
+      上游提供转写、匿名说话人 ID 和次方言标签；第二阶段另有 clean/noisy 标签。
+      注册年龄与性别不等同于听感年龄与听感性别。availability 的 false 表示所查上游说明未提供该类标注。
+    license_note: >-
+      自定义 KeSpeech License：限非商业使用，禁止向第三方分发，禁止演绎，允许必要技术修改；
+      第三方定义对受合同约束的雇员和外包商有例外，完整条件以许可原文为准。
+    limitations: '次方言分布不均衡，次方言判定含主观性；当前未固定镜像数据 revision。'
+    evidence:
+      accessed_on: '2026-09-15'
+      paper: https://openreview.net/forum?id=b3Zoeq2sCLq
+      paper_pdf: https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/file/0336dcbab05b9d5ad24f4333c7658a0e-Paper-round2.pdf
+      readme: https://github.com/tzyll/KeSpeech/blob/main/README.md
+      download_mirror: https://www.modelscope.cn/datasets/pengzhendong/KeSpeech
+
+labels:
+  fixed:
+    language: zh
+    locale: zh-CN
+    interaction.type: monologue
+    speaking_style: read
+    scenario.channel: direct_recording
+    device: builtin_mic
+  distribution:
+    acoustic: {}
+    domain: {}
+    scenario.environment: {}
+  unknown:
+    - code_switching
+    - secondary_languages
+    - speaker.perceived_voice_gender
+    - speaker.age_group
+    - speaker.speaker_consistency
+    - scenario.product_context
+    - scenario.content_genre
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+
+usage:
+  intended_use:
+    - asr_training
+    - asr_evaluation
+  not_recommended_for:
+    - tts_training
+    - voice_cloning
+
+license: KeSpeech License (custom)
+license_uri: https://github.com/tzyll/KeSpeech/blob/main/dataset_license.md
+homepage: https://github.com/tzyll/KeSpeech
+
+provenance:
+  repo: tzyll/KeSpeech
+  revision: null
+  archive_uri: tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/zh/kespeech/source/
+
+generation:
+  generated_at: "2026-09-15T14:13:45+08:00"
+  entrypoint: '依据论文、官方 README、数据许可及现有下载/上传证据生成本地 raw 数据卡'
+  validation: >-
+    本次已检查 YAML 结构、必填字段、标签枚举和互斥性。
+    2026-09-15 会话内 TOS 全量列举及逐对象 stat：9 个分卷、144387352346 字节，
+    路径和大小与下载配置一致，缺失 0、多余 0、大小不符 0，du 总量一致。
+    远端 CRC64 与上传日志一致，但未重新计算本地 CRC64。
+    现有 verification_report.json（2026-09-11）记录九个本地分卷的官方 MD5、镜像 SHA256 均匹配；本次未重算。
+    未验证包内样本总数、分 split 时长、全量音频解码或 GitHub 附带文件的完整归档。本次仅生成本地卡片。

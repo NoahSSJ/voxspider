@@ -1,0 +1,37 @@
+{
+  "scanned_at": "2026-09-24T07:06:08.687967+00:00",
+  "results": [
+    {
+      "dataset": "Emilia-Dataset",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "EuroSpeech",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "LEMAS-Dataset-train",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "OpenDialog",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "RealMAN",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "Vaani",
+      "outcome": "retry"
+    },
+    {
+      "dataset": "WorldSpeech",
+      "outcome": "skipped"
+    },
+    {
+      "dataset": "indian-english-nptel-test",
+      "outcome": "skipped"
+    }
+  ]
+}

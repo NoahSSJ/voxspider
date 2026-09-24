@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "outcome": {"type": "string", "enum": ["ready", "manual_review", "retry"]},
+    "reason": {"type": "string"}
+  },
+  "required": ["outcome", "reason"],
+  "additionalProperties": false
+}

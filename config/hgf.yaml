@@ -2,7 +2,8 @@ loader:
   endpoint: "https://huggingface.co"
   max_workers: 1
   save_name: "datasets"
-  download_workers: 8
+  download_workers: 3
+  reserve_bytes: 1073741824
   download_max_attempts: 5
   retry_base_seconds: 3
 
@@ -38,11 +39,62 @@ datasets:
     url: "https://huggingface.co/datasets/disco-eth/WorldSpeech/tree/main"
     tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/source"
     enabled: true
-    status: false
+    status: true
 
   - name: 'OpenDialog'
     repo_id: 'k2-fsa/OpenDialog'
     url: 'https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/main'
     tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source"
+    enabled: true
+    status: true
+
+  # - name: 'OpenDialog'
+  #   repo_id: 'k2-fsa/OpenDialog'
+  #   url: 'https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/main'
+  #   tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source"
+  #   enabled: true
+  #   status: true
+
+  
+  
+  - name: 'LEMAS-Dataset-train'
+    repo_id: 'LEMAS-Project/LEMAS-Dataset-train'
+    url: "https://huggingface.co/datasets/LEMAS-Project/LEMAS-Dataset-train/tree/main"
+    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/LEMAS-Dataset-train/source"
+    enabled: true
+    status: true
+
+  - name: 'indian-english-nptel-test'
+    repo_id: 'skbose/indian-english-nptel-test'
+    url: 'https://huggingface.co/datasets/skbose/indian-english-nptel-test/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/source'
+    enabled: true
+    status: true
+
+  - name: "EuroSpeech"
+    repo_id: 'disco-eth/EuroSpeech'
+    url: "https://huggingface.co/datasets/disco-eth/EuroSpeech/tree/main"
+    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/EuroSpeech/source"
+    enabled: true
+    status: true
+
+  - name: 'Vaani'
+    repo_id: 'ARTPARK-IISc/Vaani'
+    url: 'https://huggingface.co/datasets/ARTPARK-IISc/Vaani'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/Vaani/source'
+    enabled: true
+    status: true
+
+  - name: 'RealMAN'
+    repo_id: 'AISHELL/RealMAN'
+    url: 'https://huggingface.co/datasets/AISHELL/RealMAN/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/RealMAN'
+    enabled: true
+    status: true
+
+  - name: 'Emilia-Dataset'
+    repo_id: 'amphion/Emilia-Dataset'
+    url: 'https://huggingface.co/datasets/amphion/Emilia-Dataset/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/Emilia-Dataset/source'
     enabled: true
     status: false

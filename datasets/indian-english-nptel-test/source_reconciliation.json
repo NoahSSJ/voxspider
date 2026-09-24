@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checked_at": "2026-09-15T03:15:06.350527+00:00",
+  "repo_id": "skbose/indian-english-nptel-test",
+  "commit_id": "0d4db048a0d4cd80f7a5eb34937e1a28029ce470",
+  "manifest_sha256": "922c52c45d192ba2408ccdffa1b9ce82a7ba82b3e1e4278f7aa019da04176281",
+  "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/source/",
+  "expected_count": 270,
+  "listed_count": 270,
+  "du_count": 270,
+  "expected_bytes": 129501396124,
+  "checked_bytes": 129501396124,
+  "du_bytes": 129501396124,
+  "missing": [],
+  "extra": [],
+  "mismatches": [],
+  "errors": []
+}

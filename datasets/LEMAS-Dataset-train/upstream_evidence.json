@@ -1,0 +1,10 @@
+{
+  "repo_id": "LEMAS-Project/LEMAS-Dataset-train",
+  "commit_id": "91f0c1b9a29f8d1c5bad18182a43975255512cce",
+  "accessed_at": "2026-09-14T10:02:58.361402+00:00",
+  "readme_url": "https://huggingface.co/datasets/LEMAS-Project/LEMAS-Dataset-train/blob/91f0c1b9a29f8d1c5bad18182a43975255512cce/README.md",
+  "readme_blob_sha1": "609a3b1dfac515b6edec1da5ebff2c198dc31d52",
+  "official_tree_matches_manifest": true,
+  "scope": "complete train repository; eval is a separate repository",
+  "license_evidence": "fixed README YAML license: cc-by-4.0"
+}

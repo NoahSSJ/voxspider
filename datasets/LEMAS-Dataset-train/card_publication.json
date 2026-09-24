@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/LEMAS-Dataset-train/dataset_card.yaml",
+  "size": 5218,
+  "crc64": "5260329010431868417",
+  "sha256": "cde81adc9562ce0b2487593a496af4d3a48ba72a48890ed1bd88cb0b73a0102e",
+  "verified_at": "2026-09-14T10:04:11.385696+00:00"
+}

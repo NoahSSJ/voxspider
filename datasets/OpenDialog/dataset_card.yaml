@@ -1,0 +1,115 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: OpenDialog
+  name: OpenDialog
+  version: unversioned
+  split: all
+  description: 中英双语自然场景口语对话数据集，用于对话语音生成；完整归档官方固定 commit 的全部文件。
+  subsets_note: en 和 zh 为互斥语种分区；此固定版本未提供独立 train/dev/test 划分，all 表示完整未划分语料，不表示存在三个
+    split。
+  subsets:
+  - id: en
+    split: all
+    num_samples: 766628
+  - id: zh
+    split: all
+    num_samples: 278722
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_hf_snapshot
+    description: 完整原样归档 k2-fsa/OpenDialog@be9e48fbc34bf870417d42f1b2fe0b72eac8beff
+      的 111 个文件，保留原始 tar、JSONL、README 和点文件；未转换、重采样、筛选或重命名。
+    date: '2026-09-08'
+    recipe_uri: https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/be9e48fbc34bf870417d42f1b2fe0b72eac8beff
+  manifests:
+    samples: null
+data:
+  num_samples: 1045350
+  total_duration_hours: 6832.50397
+  languages:
+  - language: en
+    locale: en
+    duration_hours: 5073.946121
+  - language: zh
+    locale: zh
+    duration_hours: 1758.557849
+  format:
+    storage: Original tar archives containing MP3 audio; original JSONL manifests
+    layout: audio/en/*.tar + audio/zh/*.tar + manifest.en.jsonl + manifest.zh.jsonl
+    text_column: text
+  statistics:
+    basis: 全量扫描两个原始 JSONL，累加 duration（秒）；num_samples 是清单行数，未解码音频或逐条核对 tar 内成员。
+    splits:
+      all:
+        num_samples: 1045350
+        total_duration_hours: 6832.50397
+    by_language:
+      en:
+        num_samples: 766628
+        total_duration_hours: 5073.946121
+      zh:
+        num_samples: 278722
+        total_duration_hours: 1758.557849
+    upstream_reported_hours:
+      en: 5074
+      zh: 1759
+      sum: 6833
+    reconciliation: 实测英语 5073.946121 小时、中文 1758.557849 小时，分别四舍五入到整数与 README 的 5074/1759
+      一致。README 未提供确切样本数；仓库 size_categories 标签为粗粒度元数据，卡片采用实际全量清单计数。
+    sampling_rate_hz_from_manifest: 24000
+    speaker_annotation: 所有清单行的 text 均包含 [S1] 和 [S2]；仅表示片段内说话人标记，未证明跨片段身份一致性；无时间对齐标注。
+    source_files: 111
+    source_bytes: 101493879900
+    usage_limitations: 上游许可为 CC-BY-NC-4.0（署名、非商业性使用）；保留上游署名与引用信息。说话人标记仅限片段内，不作为跨片段音色身份依据。
+labels:
+  fixed:
+    interaction.type: dialogue
+  distribution:
+    language:
+      en: 766628
+      zh: 278722
+  unknown:
+  - speaking_style
+  - speaker.speaker_consistency
+  - speaker.perceived_voice_gender
+  - speaker.age_group
+  - scenario.environment
+  - scenario.channel
+  - scenario.product_context
+  - scenario.content_genre
+  - acoustic
+  - device
+  - domain
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - tts_training
+  not_recommended_for:
+  - voice_cloning
+license: CC-BY-NC-4.0
+license_uri: https://huggingface.co/datasets/k2-fsa/OpenDialog/blob/be9e48fbc34bf870417d42f1b2fe0b72eac8beff/README.md
+homepage: https://huggingface.co/datasets/k2-fsa/OpenDialog
+provenance:
+  repo: k2-fsa/OpenDialog
+  revision: be9e48fbc34bf870417d42f1b2fe0b72eac8beff
+  archive_uri: tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source/
+generation:
+  generated_at: '2026-09-08T02:47:06.275193+00:00'
+  entrypoint: core.huggingface + hf-filewise-tos-archive/scripts/archive_checks.py
+    + full JSONL statistics
+  args: k2-fsa/OpenDialog@be9e48fbc34bf870417d42f1b2fe0b72eac8beff
+  validation: 固定 commit 官方完整文件树与清单的路径/大小/摘要一致；111 个文件已有本地大小及 SHA256/Git blob 核验记录；TOS
+    全量路径/大小/CRC64 与 du 对账通过，缺失/多余/不符均为 0。两个 JSONL 重新验证 SHA256 并全量统计，各语种 id 和音频路径无重复。未做音频解码、跨语种
+    ID 去重或逐条 tar 成员核验。

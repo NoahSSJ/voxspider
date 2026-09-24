@@ -1,0 +1,593 @@
+# 待审草稿：禁止作为正式完成卡片上传；未知字段按用户要求保留。
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: EuroSpeech
+  name: EuroSpeech
+  version: unversioned
+  split: all
+  description: 待审草稿：EuroSpeech 16 kHz 多语种议会语音原始快照，涵盖 22 国/语种。全量样本数、时长及逐国许可适用性尚未确认，不可作为上传完成信号。
+  subsets_note: 保留固定 commit 的全部物理文件，包括 README 配置未声明的 italy/test 与 slovakia/train；原始 validation 路径未重命名。
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_hf_snapshot
+    description: 原样归档 disco-eth/EuroSpeech@7a55bbcee3933f5d9817bb2d4c37399d596f543d 的 10934 个文件；保留路径与字节，不做过滤、重采样或转码。
+    recipe_uri: hf:disco-eth/EuroSpeech@7a55bbcee3933f5d9817bb2d4c37399d596f543d
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: hr
+    locale: hr
+    duration_hours: null
+  - language: da
+    locale: da
+    duration_hours: null
+  - language: 'no'
+    locale: 'no'
+    duration_hours: null
+  - language: pt
+    locale: pt
+    duration_hours: null
+  - language: it
+    locale: it
+    duration_hours: null
+  - language: lt
+    locale: lt
+    duration_hours: null
+  - language: en
+    locale: en
+    duration_hours: null
+  - language: sk
+    locale: sk
+    duration_hours: null
+  - language: el
+    locale: el
+    duration_hours: null
+  - language: sv
+    locale: sv
+    duration_hours: null
+  - language: fr
+    locale: fr
+    duration_hours: null
+  - language: bg
+    locale: bg
+    duration_hours: null
+  - language: de
+    locale: de
+    duration_hours: null
+  - language: sr
+    locale: sr
+    duration_hours: null
+  - language: fi
+    locale: fi
+    duration_hours: null
+  - language: lv
+    locale: lv
+    duration_hours: null
+  - language: uk
+    locale: uk
+    duration_hours: null
+  - language: sl
+    locale: sl
+    duration_hours: null
+  - language: et
+    locale: et
+    duration_hours: null
+  - language: bs
+    locale: bs
+    duration_hours: null
+  - language: is
+    locale: is
+    duration_hours: null
+  - language: mt
+    locale: mt
+    duration_hours: null
+  format:
+    storage: parquet
+    layout: '{country}/{train|validation|test}-xxxxx-of-yyyyy.parquet；audio 列为上游 16 kHz 音频。'
+    text_column: human_transcript
+  statistics:
+    review_status: draft_needs_review
+    archived_files: 10934
+    archived_size_bytes: 5906377769177
+    parquet_files: 10932
+    splits:
+      train:
+        num_samples: null
+        total_duration_hours: null
+      dev:
+        num_samples: null
+        total_duration_hours: null
+      test:
+        num_samples: null
+        total_duration_hours: null
+    split_mapping_note: 卡片 dev 对应上游 validation；未知值描述全量物理快照，不以官方配置声明数量替代。
+    official_declared_statistics:
+      basis: 固定 commit README；均为官方声明，未遍历 Parquet 行或 duration_seconds 实测，范围与物理快照未确认一致。
+      cer_lt_20_total_duration_hours: 50572.9
+      per_language:
+      - language: hr
+        official_cer_lt_20_duration_hours: 5615.8
+      - language: da
+        official_cer_lt_20_duration_hours: 5559.8
+      - language: 'no'
+        official_cer_lt_20_duration_hours: 3866.7
+      - language: pt
+        official_cer_lt_20_duration_hours: 3293.5
+      - language: it
+        official_cer_lt_20_duration_hours: 2813.7
+      - language: lt
+        official_cer_lt_20_duration_hours: 2681.2
+      - language: en
+        official_cer_lt_20_duration_hours: 2609.3
+      - language: sk
+        official_cer_lt_20_duration_hours: 2553.6
+      - language: el
+        official_cer_lt_20_duration_hours: 2395.4
+      - language: sv
+        official_cer_lt_20_duration_hours: 2312.8
+      - language: fr
+        official_cer_lt_20_duration_hours: 2249.8
+      - language: bg
+        official_cer_lt_20_duration_hours: 2200.1
+      - language: de
+        official_cer_lt_20_duration_hours: 2184.4
+      - language: sr
+        official_cer_lt_20_duration_hours: 1855.7
+      - language: fi
+        official_cer_lt_20_duration_hours: 1848.2
+      - language: lv
+        official_cer_lt_20_duration_hours: 1218.8
+      - language: uk
+        official_cer_lt_20_duration_hours: 1191.1
+      - language: sl
+        official_cer_lt_20_duration_hours: 1156.4
+      - language: et
+        official_cer_lt_20_duration_hours: 1014.9
+      - language: bs
+        official_cer_lt_20_duration_hours: 691.3
+      - language: is
+        official_cer_lt_20_duration_hours: 647.4
+      - language: mt
+        official_cer_lt_20_duration_hours: 613.0
+      configured_num_samples: 12260891
+      configured_samples_by_split:
+        dev: 155908
+        train: 11975997
+        test: 128986
+      configured_samples_by_country:
+        bosnia-herzegovina:
+          validation: 1909
+          train: 162735
+          test: 1961
+        bulgaria:
+          train: 513483
+          validation: 7294
+          test: 6892
+        estonia:
+          train: 208412
+          test: 3554
+          validation: 3175
+        france:
+          test: 744
+          train: 530671
+        germany:
+          train: 502515
+          test: 4872
+          validation: 6193
+        greece:
+          train: 562010
+          validation: 9262
+          test: 6730
+        iceland:
+          train: 149533
+          validation: 2732
+          test: 3159
+        italy:
+          train: 658661
+          validation: 7429
+        latvia:
+          train: 285083
+          validation: 3188
+          test: 3343
+        lithuania:
+          train: 631550
+          validation: 6434
+          test: 7319
+        norway:
+          train: 906667
+          validation: 10038
+          test: 10042
+        portugal:
+          train: 780469
+          validation: 7951
+          test: 7501
+        serbia:
+          train: 432659
+          validation: 4853
+          test: 4961
+        slovakia:
+          validation: 6607
+          test: 5104
+        slovenia:
+          train: 270428
+          validation: 3721
+          test: 3585
+        sweden:
+          train: 543459
+          validation: 6305
+          test: 6138
+        ukraine:
+          train: 277032
+          test: 3239
+          validation: 3064
+        malta:
+          test: 3446
+          train: 305674
+          validation: 3124
+        finland:
+          test: 5422
+          train: 464803
+          validation: 6105
+        croatia:
+          test: 15638
+          train: 1386349
+          validation: 15353
+        uk:
+          test: 9268
+          train: 888252
+          validation: 9181
+        denmark:
+          test: 16068
+          train: 1515552
+          validation: 31990
+      count_scope_note: 配置声明的样本数不包含 italy/test 和 slovakia/train，不是全量样本总数；小时数为正文 CER<20% 汇总，二者口径不能自动等同。
+    physical_files_by_country_split:
+      bosnia-herzegovina:
+        test:
+          file_count: 2
+          size_bytes: 935204075
+        train:
+          file_count: 156
+          size_bytes: 77270396436
+        validation:
+          file_count: 2
+          size_bytes: 907847521
+      bulgaria:
+        test:
+          file_count: 7
+          size_bytes: 3287186232
+        train:
+          file_count: 497
+          size_bytes: 246037968803
+        validation:
+          file_count: 8
+          size_bytes: 3499734617
+      croatia:
+        test:
+          file_count: 10
+          size_bytes: 6702354020
+        train:
+          file_count: 941
+          size_bytes: 586108414874
+        validation:
+          file_count: 11
+          size_bytes: 6493434208
+      denmark:
+        test:
+          file_count: 9
+          size_bytes: 6325004005
+        train:
+          file_count: 864
+          size_bytes: 604160684686
+        validation:
+          file_count: 19
+          size_bytes: 12782176881
+      estonia:
+        test:
+          file_count: 4
+          size_bytes: 1707836583
+        train:
+          file_count: 204
+          size_bytes: 100663780751
+        validation:
+          file_count: 4
+          size_bytes: 1535024627
+      finland:
+        test:
+          file_count: 3
+          size_bytes: 2189500519
+        train:
+          file_count: 270
+          size_bytes: 182556328905
+        validation:
+          file_count: 3
+          size_bytes: 2364396855
+      france:
+        test:
+          file_count: 1
+          size_bytes: 350230349
+        train:
+          file_count: 507
+          size_bytes: 251409399697
+      germany:
+        test:
+          file_count: 5
+          size_bytes: 2342796945
+        train:
+          file_count: 484
+          size_bytes: 241734632424
+        validation:
+          file_count: 6
+          size_bytes: 2971239302
+      greece:
+        test:
+          file_count: 7
+          size_bytes: 3225371223
+        train:
+          file_count: 527
+          size_bytes: 268165179994
+        validation:
+          file_count: 9
+          size_bytes: 4428359677
+      iceland:
+        test:
+          file_count: 4
+          size_bytes: 1501745604
+        train:
+          file_count: 143
+          size_bytes: 71665200817
+        validation:
+          file_count: 3
+          size_bytes: 1309691277
+      italy:
+        test:
+          file_count: 9
+          size_bytes: 4162438919
+        train:
+          file_count: 627
+          size_bytes: 313865990071
+        validation:
+          file_count: 8
+          size_bytes: 3556740518
+      latvia:
+        test:
+          file_count: 4
+          size_bytes: 1601933048
+        train:
+          file_count: 276
+          size_bytes: 135197460497
+        validation:
+          file_count: 4
+          size_bytes: 1522158607
+      lithuania:
+        test:
+          file_count: 8
+          size_bytes: 3456915347
+        train:
+          file_count: 604
+          size_bytes: 299225734270
+        validation:
+          file_count: 7
+          size_bytes: 3051327374
+      malta:
+        test:
+          file_count: 3
+          size_bytes: 1356848756
+        train:
+          file_count: 238
+          size_bytes: 121699326266
+        validation:
+          file_count: 3
+          size_bytes: 1242514618
+      norway:
+        test:
+          file_count: 10
+          size_bytes: 4096168440
+        train:
+          file_count: 881
+          size_bytes: 433223919566
+        validation:
+          file_count: 10
+          size_bytes: 4581445202
+      portugal:
+        test:
+          file_count: 8
+          size_bytes: 3565901478
+        train:
+          file_count: 737
+          size_bytes: 372232713246
+        validation:
+          file_count: 8
+          size_bytes: 3781538375
+      serbia:
+        test:
+          file_count: 5
+          size_bytes: 2380682821
+        train:
+          file_count: 416
+          size_bytes: 208447963687
+        validation:
+          file_count: 5
+          size_bytes: 2338545951
+      slovakia:
+        test:
+          file_count: 5
+          size_bytes: 2884040764
+        train:
+          file_count: 417
+          size_bytes: 261608516135
+        validation:
+          file_count: 5
+          size_bytes: 2947513898
+      slovenia:
+        test:
+          file_count: 4
+          size_bytes: 1710592902
+        train:
+          file_count: 259
+          size_bytes: 129507018658
+        validation:
+          file_count: 4
+          size_bytes: 1782122744
+      sweden:
+        test:
+          file_count: 6
+          size_bytes: 2922885895
+        train:
+          file_count: 521
+          size_bytes: 259460034521
+        validation:
+          file_count: 7
+          size_bytes: 2999453415
+      uk:
+        test:
+          file_count: 7
+          size_bytes: 3791287482
+        train:
+          file_count: 558
+          size_bytes: 365394070620
+        validation:
+          file_count: 6
+          size_bytes: 3758257079
+      ukraine:
+        test:
+          file_count: 7
+          size_bytes: 3088218866
+        train:
+          file_count: 539
+          size_bytes: 242414767620
+        validation:
+          file_count: 6
+          size_bytes: 2889560194
+    scope_differences:
+    - config: italy
+      split: test
+      manifest_file_count: 9
+    - config: slovakia
+      split: train
+      manifest_file_count: 417
+    license_note: 上游 license=other，未提供适用于全体数据的统一许可证。下列链接原样来自固定版本 README；未独立确认逐国条款对归档、再分发和预定用途的适用性。
+    license_references_by_country:
+    - country: Croatia
+      upstream_policy_references: '[Legal Notice](https://www.sabor.hr/index.php/en/legal-notice)'
+    - country: Denmark
+      upstream_policy_references: '[Legal Notice](https://www.ft.dk/da/aktuelt/tv-fra-folketinget/deling-og-rettigheder#A5FB53FDE08B4CFBA457A63E7B364584)'
+    - country: Norway
+      upstream_policy_references: '[NLOD License](https://data.norge.no/nlod/en/2.0)'
+    - country: Portugal
+      upstream_policy_references: '[Portuguese Copyright Code](https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?artigo_id=484A0075&nid=484&tabela=leis&pagina=1&ficha=1&so_miolo=&nversao=#artigo)
+        Article 75'
+    - country: Italy
+      upstream_policy_references: '[Italian Parliament Website](https://www.senato.it/) references [CC
+        By 4.0 License](https://creativecommons.org/licenses/by/4.0/legalcode.it)'
+    - country: Lithuania
+      upstream_policy_references: '[Republic of Lithuania Law on Copyright and Related Rights](https://www.wipo.int/edocs/lexdocs/laws/en/lt/lt081en.pdf)
+        Article 22'
+    - country: United Kingdom
+      upstream_policy_references: '[Terms and Conditions](https://www.parliament.uk/site-information/copyright-parliament/pru-licence-agreements/downloading--sharing-terms--conditions/)
+        for audio, [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
+        for transcripts'
+    - country: Slovakia
+      upstream_policy_references: '[Slovak Copyright Act](https://wipolex-res.wipo.int/edocs/lexdocs/laws/en/sk/sk096en.pdf)
+        Chapter One Section 5e)'
+    - country: Greece
+      upstream_policy_references: '[Greek Copyright Law](https://eratospe.org/2121_1993_en..pdf) Article
+        2(5) and Article 25(1)(b)'
+    - country: Sweden
+      upstream_policy_references: '[Law (2022:818)](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-2022818-om-den-offentliga-sektorns_sfs-2022-818/#K2)'
+    - country: France
+      upstream_policy_references: '[License Ouverte](https://www.etalab.gouv.fr/licence-ouverte-open-licence/)'
+    - country: Bulgaria
+      upstream_policy_references: '[Copyright Policy](https://www.president.bg/static104/Copyright-and-Legal-Policy/?lang=en&skipMobile=1)
+        references [CC BY 2.5 BG](https://creativecommons.org/licenses/by/2.5/bg/)'
+    - country: Germany
+      upstream_policy_references: '[Terms of Use](https://www.bundestag.de/resource/blob/296018/45ce89d3a71fea6b068511a93da129bb/nutzungsbedingungen_en.pdf)'
+    - country: Serbia
+      upstream_policy_references: '[Serbian Law on Copyright and Related Rights](https://wipolex-res.wipo.int/edocs/lexdocs/laws/en/rs/rs061en.html)
+        Article 6(2)'
+    - country: Finland
+      upstream_policy_references: '[Copyright Act](https://wipolex-res.wipo.int/edocs/lexdocs/laws/en/fi/fi001en.pdf)
+        Article 9, 22, and 25'
+    - country: Latvia
+      upstream_policy_references: '[Latvian Copyright Law](https://likumi.lv/ta/en/en/id/5138) Section
+        21'
+    - country: Ukraine
+      upstream_policy_references: '[Law of Ukraine on Copyright and Related Rights](https://wipolex-resources-eu-central-1-358922420655.s3.amazonaws.com/edocs/lexdocs/laws/en/ua/ua210en_1.pdf)
+        Article 8(1)(3)'
+    - country: Slovenia
+      upstream_policy_references: '[Copyright and Related Rights Act](https://wipolex-res.wipo.int/edocs/lexdocs/laws/en/si/si082en.html)
+        Article 46-51'
+    - country: Estonia
+      upstream_policy_references: '[Copyright Act](https://www.riigiteataja.ee/en/eli/525112013002/consolide),
+        [Estonian Youtube](https://www.youtube.com/riigikogu) references [CC BY SA](https://creativecommons.org/licenses/by-sa/4.0/)'
+    - country: Bosnia & Herzegovina
+      upstream_policy_references: '[Copyright Law](https://original.co.ba/file/bih-copyright-law/36) Article
+        44 and 47'
+    - country: Iceland
+      upstream_policy_references: '[Copyright Act](https://www.wipo.int/wipolex/en/text/128153) Article
+        22'
+    - country: Malta
+      upstream_policy_references: '[Re-Use of Public Sector Information Act](https://legislation.mt/eli/cap/546/20250311/eng)
+        Chapter 546'
+    annotation_note: 转写列包括 human_transcript 与 asr_transcript；start_seconds/end_seconds 是源录音内片段时间，不是词级时间。video_id/transcript_id
+      不作为 speaker_id。false 表示已查上游 schema 未提供此类标注。
+    usage_note: 沿用既有 tts 归档用途；未核验音色一致性、全量解码或 TTS 适用质量，不据上游 ASR/TTS 标签自动扩大用途。
+    evidence:
+      readme_url: https://huggingface.co/datasets/disco-eth/EuroSpeech/resolve/7a55bbcee3933f5d9817bb2d4c37399d596f543d/README.md
+      readme_git_blob_sha1: 2209d70269006780c78be46b3cb56846bd369ad2
+      readme_verified_at: '2026-09-17T13:38:43+08:00'
+      upstream_evidence: upstream_evidence.json
+      source_manifest: repo_manifest.json
+labels:
+  fixed:
+    scenario.content_genre: meeting
+  distribution:
+    language: {}
+    locale: {}
+    domain: {}
+  unknown:
+  - interaction.type
+  - speaking_style
+  - scenario.environment
+  - scenario.channel
+  - scenario.product_context
+  - device
+  - acoustic
+  - code_switching
+  - secondary_languages
+  - speaker.perceived_voice_gender
+  - speaker.age_group
+  - speaker.speaker_consistency
+  availability:
+    transcript: true
+    timestamps: true
+    speaker_labels: false
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - tts_training
+  not_recommended_for:
+  - voice_cloning
+license: other
+license_uri: https://huggingface.co/datasets/disco-eth/EuroSpeech/blob/7a55bbcee3933f5d9817bb2d4c37399d596f543d/README.md#licensing-information
+homepage: https://huggingface.co/datasets/disco-eth/EuroSpeech
+provenance:
+  repo: disco-eth/EuroSpeech
+  revision: 7a55bbcee3933f5d9817bb2d4c37399d596f543d
+  archive_uri: tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/EuroSpeech/source/
+generation:
+  generated_at: '2026-09-17T13:38:43+08:00'
+  entrypoint: 基于固定 commit README、card_data、逐文件归档清单生成待审草稿
+  validation: README 字节数与 Git blob SHA1 核验通过；清单记录所有源文件本地摘要及远端大小/CRC64 核验完成。本次全量远端对账结果见 upload_preparation.json。未实测样本总量、逐
+    split 时长或音频解码；全量时长为 null，发布校验不得通过。

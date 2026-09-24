@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "operation": "register",
+  "checked_at": "2026-09-08T03:58:17.191051+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-09-08T03:58:22.664934+00:00",
+    "repo_id": "k2-fsa/OpenDialog",
+    "commit_id": "be9e48fbc34bf870417d42f1b2fe0b72eac8beff",
+    "manifest_sha256": "fa2148fb3eb0230348e1f552d9bdca1be47d31934e116eb86cd962a5da38d656",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source/",
+    "expected_count": 111,
+    "listed_count": 111,
+    "du_count": 111,
+    "expected_bytes": 101493879900,
+    "checked_bytes": 101493879900,
+    "du_bytes": 101493879900,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  },
+  "card_verification": {
+    "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/dataset_card.yaml",
+    "size": 4395,
+    "crc64": "4807539591699172644",
+    "sha256": "34740612538050de1c3cd3bdf7d44784bce22b38f919f3f4acf5a241bb6d5950",
+    "verified_at": "2026-09-08T03:58:22.701296+00:00"
+  },
+  "registry": "/home/shuxianzhong/voxspider/archived.json",
+  "registered_manifest_sha256": "69de0842516abdbfd5ae79c7657e0524d9cd7b1872884f204167c5242531e19e"
+}

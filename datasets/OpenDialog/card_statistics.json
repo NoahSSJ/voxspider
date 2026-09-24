@@ -1,0 +1,56 @@
+{
+  "repo_id": "k2-fsa/OpenDialog",
+  "commit_id": "be9e48fbc34bf870417d42f1b2fe0b72eac8beff",
+  "method": "Full scan of both original JSONL manifests; duration seconds summed as Decimal; no audio decoding.",
+  "languages": {
+    "en": {
+      "num_samples": 766628,
+      "total_duration_seconds": "18266206.0371250000000006",
+      "total_duration_hours": 5073.946121423611,
+      "fields_present_count": {
+        "id": 766628,
+        "duration": 766628,
+        "text": 766628,
+        "dnsmos": 766628,
+        "path": 766628,
+        "sampling_rate": 766628
+      },
+      "sampling_rate_counts": {
+        "24000": 766628
+      },
+      "nonempty_transcripts": 766628,
+      "both_speaker_markers_count": 766628,
+      "unique_ids": 766628,
+      "unique_audio_paths": 766628,
+      "source_path": "manifest.en.jsonl",
+      "source_sha256": "631ac7e28e64e1d6c0f3f246f189f5cc5a10b6fd2032a1b5e1600c2549050c23",
+      "source_bytes": 556111222
+    },
+    "zh": {
+      "num_samples": 278722,
+      "total_duration_seconds": "6330808.2548333333333254",
+      "total_duration_hours": 1758.5578485648148,
+      "fields_present_count": {
+        "id": 278722,
+        "duration": 278722,
+        "text": 278722,
+        "dnsmos": 278722,
+        "path": 278722,
+        "sampling_rate": 278722
+      },
+      "sampling_rate_counts": {
+        "24000": 278722
+      },
+      "nonempty_transcripts": 278722,
+      "both_speaker_markers_count": 278722,
+      "unique_ids": 278722,
+      "unique_audio_paths": 278722,
+      "source_path": "manifest.zh.jsonl",
+      "source_sha256": "bde2e07d6f8c0bc5230d1515da8902a87fc16f6cf8c4fb3c9da4aadc6bb9387c",
+      "source_bytes": 179933072
+    }
+  },
+  "num_samples": 1045350,
+  "total_duration_hours": 6832.5039699884255,
+  "generated_at": "2026-09-08T02:45:56.972259+00:00"
+}

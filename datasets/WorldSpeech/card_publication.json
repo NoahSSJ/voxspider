@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/dataset_card.yaml",
+  "size": 48716,
+  "crc64": "2462168000129271119",
+  "sha256": "a981578014b09738f7a37dcf1e5d76be9f18a96b8827ddc2f77df40f6c7cc967",
+  "verified_at": "2026-09-09T02:27:13.402509+00:00"
+}

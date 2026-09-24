@@ -1,0 +1,23 @@
+{
+  "source": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/",
+  "destination": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/RealMAN/",
+  "count": 253,
+  "bytes": 811844478396,
+  "copied": 253,
+  "copied_bytes": 811844478396,
+  "phase": "destination_complete_cleanup_denied",
+  "started_at": "2026-09-21T02:55:09.825834+00:00",
+  "cleanup": {
+    "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/": {
+      "deleted": 0,
+      "error": "403 AccessDenied: object deletion not permitted",
+      "remaining_manifest_files": 253
+    },
+    "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/ /": {
+      "deleted": 0,
+      "remaining_manifest_files": 0
+    }
+  },
+  "destination_verified": true,
+  "completed_at": "2026-09-21T03:08:08.288643+00:00"
+}

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Rolling HF Dataset TOS Archiver"
-  short_description: "Archive huge Hugging Face datasets with bounded disk"
-  default_prompt: "Use $rolling-hf-dataset-tos-archiver to archive this large Hugging Face dataset to TOS one verified file at a time."

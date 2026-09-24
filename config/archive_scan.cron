@@ -1,0 +1,1 @@
+0 */3 * * * /bin/bash /home/shuxianzhong/voxspider/scripts/run_archive_scan.sh >> /home/shuxianzhong/voxspider/logs/archive_scan/cron.log 2>&1 # voxspider-archive-scan

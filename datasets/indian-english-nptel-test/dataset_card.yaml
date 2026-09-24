@@ -1,0 +1,112 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: indian-english-nptel-test
+  name: indian-english-nptel-test
+  version: unversioned
+  split: all
+  description: 完整归档 skbose/indian-english-nptel-test 固定版本的原始 Parquet 音频及元数据。虽仓库名含
+    test，实际包含 train 和 test 两个 split，all 表示覆盖该仓库的全部 split。上游未声明数据许可证，license 与 license_uri
+    保持 null。
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_hf_snapshot
+    description: 完整原样归档 skbose/indian-english-nptel-test@0d4db048a0d4cd80f7a5eb34937e1a28029ce470
+      的全部 270 个文件；未转换、筛选或重编码。
+    date: '2026-09-15'
+    recipe_uri: https://huggingface.co/datasets/skbose/indian-english-nptel-test/tree/0d4db048a0d4cd80f7a5eb34937e1a28029ce470
+  manifests:
+    samples: null
+data:
+  num_samples: 544230
+  total_duration_hours: 1163.430994045139
+  languages:
+  - language: en
+    locale: en
+    duration_hours: 1163.430994045139
+  format:
+    storage: Original Parquet with audio feature
+    layout: data/train-*.parquet + data/test-*.parquet
+    text_column: transcription
+  statistics:
+    archived_files: 270
+    archived_size_bytes: 129501396124
+    splits:
+      train:
+        num_samples: 435384
+        total_duration_hours: 930.6732001909722
+      test:
+        num_samples: 108846
+        total_duration_hours: 232.75779385416666
+    statistics_source: https://huggingface.co/datasets/skbose/indian-english-nptel-test/blob/0d4db048a0d4cd80f7a5eb34937e1a28029ce470/README.md
+    statistics_basis: 样本数和音频时长由固定 commit 全部 268 个 Parquet 的全部 PCM WAV 音频统计；样本数与官方
+      README 分 split 完全一致。时长为逐条音频帧数/采样率的精确累加。
+    language_basis: 用户已确认的 asr/en 归档目标及仓库名称；README 未声明语言分布，未全量检测。
+    features:
+    - name: audio
+      dtype: audio
+    - name: file_name
+      dtype: string
+    - name: transcription
+      dtype: string
+    - name: speaker_name
+      dtype: string
+    - name: transcription_normalised
+      dtype: string
+    review_status: reviewed_with_undeclared_license
+    annotation_limitations: speaker_name 字段仅证明有说话人名称标注，不证明说话人一致性；其余未声明标注记为 false，不等于逐样本确认不存在。
+    duration_evidence: 本地管理报告 audio_duration_report.json（不属于远端 source 文件）；卡片已内含分 split
+      总量与零时长数量。
+    zero_duration_samples:
+      train: 52
+      test: 11
+    license_status: 上游未声明；按用户已确认的空值处理保留 null，不表示获得任何具体许可。
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - language
+  - locale
+  - code_switching
+  - secondary_languages
+  - speaker.voice_id
+  - speaker.perceived_voice_gender
+  - speaker.age_group
+  - speaker.speaker_consistency
+  - interaction.type
+  - speaking_style
+  - scenario.environment
+  - scenario.channel
+  - scenario.product_context
+  - scenario.content_genre
+  - acoustic
+  - device
+  - domain
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use:
+  - asr_training
+  - asr_evaluation
+  not_recommended_for:
+  - tts_training
+  - voice_cloning
+license: null
+license_uri: null
+homepage: https://huggingface.co/datasets/skbose/indian-english-nptel-test
+generation:
+  generated_at: '2026-09-15T03:14:56.290555+00:00'
+  validation: 源文件 270 个、129501396124 字节全量路径/大小/CRC64 对账通过。统计时全部 268 个 Parquet 重新校验大小及上游
+    SHA256；遍历 544230 条嵌入 PCM WAV，逐条检查采样率、帧数与完整 PCM 负载字节数，精确累加音频时长。train/test 样本数与官方
+    README 一致；无音频解析或截断错误；0 帧音频按 0 秒计入，其数量详见 statistics.zero_duration_samples。未进行听感、语言或转写质量验证。上游未声明许可证，按用户已确认的处理保留
+    null。

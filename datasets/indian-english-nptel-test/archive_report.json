@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "operation": "register",
+  "checked_at": "2026-09-15T03:15:06.495081+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-09-15T03:15:14.728143+00:00",
+    "repo_id": "skbose/indian-english-nptel-test",
+    "commit_id": "0d4db048a0d4cd80f7a5eb34937e1a28029ce470",
+    "manifest_sha256": "a5b0efe784043b6acea45c5fffb53a9e308b0702a9dde702b87bb18e316078d3",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/source/",
+    "expected_count": 270,
+    "listed_count": 270,
+    "du_count": 270,
+    "expected_bytes": 129501396124,
+    "checked_bytes": 129501396124,
+    "du_bytes": 129501396124,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  },
+  "card_verification": {
+    "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/dataset_card.yaml",
+    "size": 4282,
+    "crc64": "15482246005638246180",
+    "sha256": "128beb79af89f57669c575f8dd15636279a4f443989b547fbeb032c0e49bab40",
+    "verified_at": "2026-09-15T03:15:14.770850+00:00"
+  },
+  "registry": "/home/shuxianzhong/voxspider/archived.json",
+  "registered_manifest_sha256": "63080c327e47bc07a230dcefc637afa32e44c2a10cfb13d815ae4e2cebf94cb1"
+}

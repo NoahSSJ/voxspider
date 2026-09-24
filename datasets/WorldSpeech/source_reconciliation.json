@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "operation": "reconcile",
+  "checked_at": "2026-09-09T02:27:13.215284+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-09-09T02:27:13.206656+00:00",
+    "repo_id": "disco-eth/WorldSpeech",
+    "commit_id": "7fc2c2f19528b3d3972110a04e500098f6fc7f24",
+    "manifest_sha256": "72507cb186cce8a87629865d948e0e3e85162bc554f02b6fbc91eb0560e3e6f9",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/source/",
+    "expected_count": 14238,
+    "listed_count": 14238,
+    "du_count": 14238,
+    "expected_bytes": 1716577687331,
+    "checked_bytes": 1716577687331,
+    "du_bytes": 1716577687331,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  }
+}

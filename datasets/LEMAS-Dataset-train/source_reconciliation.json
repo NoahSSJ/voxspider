@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checked_at": "2026-09-14T10:04:11.280008+00:00",
+  "repo_id": "LEMAS-Project/LEMAS-Dataset-train",
+  "commit_id": "91f0c1b9a29f8d1c5bad18182a43975255512cce",
+  "manifest_sha256": "c01d6116426d92bf7c31411c6f9f88bf0550b7b17ec26538e1532d8a1cafab0d",
+  "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/LEMAS-Dataset-train/source/",
+  "expected_count": 312,
+  "listed_count": 312,
+  "du_count": 312,
+  "expected_bytes": 3596790234122,
+  "checked_bytes": 3596790234122,
+  "du_bytes": 3596790234122,
+  "missing": [],
+  "extra": [],
+  "mismatches": [],
+  "errors": []
+}

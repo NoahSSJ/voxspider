@@ -1,0 +1,41 @@
+{
+  "repo_id": "skbose/indian-english-nptel-test",
+  "commit_id": "0d4db048a0d4cd80f7a5eb34937e1a28029ce470",
+  "reviewed_at": "2026-09-15T03:14:56.297619+00:00",
+  "outcome": "ready",
+  "missing_evidence": [],
+  "field_evidence": {
+    "dataset_and_lineage": "manifest identity and full remote reconciliation",
+    "data.num_samples": "https://huggingface.co/datasets/skbose/indian-english-nptel-test/blob/0d4db048a0d4cd80f7a5eb34937e1a28029ce470/README.md dataset_info.splits",
+    "data.format_and_availability": "https://huggingface.co/datasets/skbose/indian-english-nptel-test/blob/0d4db048a0d4cd80f7a5eb34937e1a28029ce470/README.md dataset_info.features",
+    "data.languages": "configured asr/en target and repository name; not audio verified",
+    "usage": "configured ASR purpose and train/test split; TTS quality not established",
+    "license": null,
+    "data.total_duration_hours": "audio_duration_report.json: all PCM audio frames/sample rate"
+  },
+  "checks": [
+    "source full path/size/CRC64 reconciliation",
+    "README fixed-commit byte size and Git blob SHA1",
+    "split sum 435384 + 108846 = 544230",
+    "label enums and mutually exclusive paths",
+    "All Parquet sizes and SHA256 verified again",
+    "All embedded PCM WAV frame counts and payload lengths checked",
+    "All sample counts match official train/test counts",
+    "fixed-commit official full tree path/size/blob/SHA256 matches manifest",
+    "duration report identity, exact per-split sums and zero-duration counts verified",
+    "card required fields, label exclusivity and usage enums verified",
+    "removed stale draft wording; retained undeclared-license and measurement limitations"
+  ],
+  "not_performed": [
+    "license determination",
+    "listening or transcript/language quality verification"
+  ],
+  "published": true,
+  "duration_complete": true,
+  "license_exception": {
+    "value": null,
+    "basis": "用户确认上游未声明，已约定 license / license_uri 保留 null，并要求检查后上传。",
+    "scope": "仅本数据集，本次 raw 卡片；不声称手册明确规定许可证空值，也不修改全局技能。"
+  },
+  "published_at": "2026-09-15T03:15:15.886082+00:00"
+}
