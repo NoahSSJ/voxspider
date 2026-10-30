@@ -1,8 +1,0 @@
-{
-  "passed": true,
-  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/dataset_card.yaml",
-  "size": 3403,
-  "crc64": "3503738897264123597",
-  "sha256": "1ef2dc249bba48b87af4fe518e74433b3ef5eeab7ce9f4e81b68695ba6becfa6",
-  "verified_at": "2026-10-20T04:07:40.278782+00:00"
-}

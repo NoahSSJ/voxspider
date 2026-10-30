@@ -1,1 +1,0 @@
-{"outcome":"manual_review","reason":"固定 commit 81402b751b451b5fe4f4c29e8b40f92892f1e440 的清单元数据及同 commit README 都列出 openmdw-1.1 和 cc-by-sa-4.0，但没有说明这两个许可分别适用于哪些文件或子语料，也没有明确完整汇总数据集的再分发许可依据。许可属于必需实质信息，不能据此生成正式卡片；因此未创建或修改本地卡片及生成报告。已读现有清单与 source_reconciliation.json：155 个对象、111559928673 字节，对账报告为 passed。"}

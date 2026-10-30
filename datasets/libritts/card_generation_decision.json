@@ -1,1 +1,0 @@
-{"outcome":"manual_review","reason":"无法从同 commit 的 README/config 或文件级 repo_manifest.json 确定必填字段 data.num_samples；清单中的 228 个文件不是样本数。官方论文虽报告总时长及各 split 时长，但未对当前固定 commit 的 Parquet 音频实测。未编造数据或生成占位卡片。已写入 card_statistics.json、upstream_evidence.json 和 card_generation_report.json。"}
