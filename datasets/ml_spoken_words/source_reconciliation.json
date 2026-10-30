@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "operation": "reconcile",
+  "checked_at": "2026-10-26T08:02:35.393317+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-10-26T08:02:35.393099+00:00",
+    "repo_id": "MLCommons/ml_spoken_words",
+    "commit_id": "0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218",
+    "manifest_sha256": "f32c477a4e872d52806163f49a629bd88a9bccc08488dde8329b6bd0ea81d412",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/ml-spoken-words/source/",
+    "expected_count": 1333,
+    "listed_count": 1333,
+    "du_count": 1333,
+    "expected_bytes": 382426800241,
+    "checked_bytes": 382426800241,
+    "du_bytes": 382426800241,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  }
+}

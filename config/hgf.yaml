@@ -1,100 +1,40 @@
 loader:
   endpoint: "https://huggingface.co"
-  max_workers: 1
+  max_workers: 2
   save_name: "datasets"
   download_workers: 3
   reserve_bytes: 1073741824
-  download_max_attempts: 5
-  retry_base_seconds: 3
+  download_max_attempts: 15
+  retry_base_seconds: 20
 
 
 datasets:
-  # - name: "弱智吧语录"
-  #   repo_id: "TCDATA/ruozhiba"
-  #   url: "https://huggingface.co/datasets/TCDATA/ruozhiba"
-  #   enabled: false
-  #   status: false
 
-  # - name: "史上最烂小说开头"
-  #   repo_id: "venkatasg/bulwer-lytton"
-  #   url: "https://huggingface.co/datasets/venkatasg/bulwer-lytton"
-  #   enabled: false
-  #   status: false
-
-  # - name: "有趣的 AI 角色提示词"
-  #   repo_id: "fka/prompts.chat"
-  #   url: "https://huggingface.co/datasets/fka/prompts.chat"
-  #   enabled: false
-  #   status: false
-
-  - name: "synth-qa-taste-codec-chat"
-    repo_id: "yilele/synth-qa-taste-codec-chat"
-    url: "https://huggingface.co/datasets/yilele/synth-qa-taste-codec-chat"
-    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/synth-qa-taste-codec-chat/source"
-    enabled: true
-    status: true
-
-  - name: "WorldSpeech"
-    repo_id: "disco-eth/WorldSpeech"
-    url: "https://huggingface.co/datasets/disco-eth/WorldSpeech/tree/main"
-    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/WorldSpeech/source"
-    enabled: true
-    status: true
-
-  - name: 'OpenDialog'
-    repo_id: 'k2-fsa/OpenDialog'
-    url: 'https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/main'
-    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source"
-    enabled: true
-    status: true
-
-  # - name: 'OpenDialog'
-  #   repo_id: 'k2-fsa/OpenDialog'
-  #   url: 'https://huggingface.co/datasets/k2-fsa/OpenDialog/tree/main'
-  #   tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/OpenDialog/source"
-  #   enabled: true
-  #   status: true
-
-  
-  
-  - name: 'LEMAS-Dataset-train'
-    repo_id: 'LEMAS-Project/LEMAS-Dataset-train'
-    url: "https://huggingface.co/datasets/LEMAS-Project/LEMAS-Dataset-train/tree/main"
-    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/LEMAS-Dataset-train/source"
-    enabled: true
-    status: true
-
-  - name: 'indian-english-nptel-test'
-    repo_id: 'skbose/indian-english-nptel-test'
-    url: 'https://huggingface.co/datasets/skbose/indian-english-nptel-test/tree/main'
-    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/en/indian-english-nptel-test/source'
-    enabled: true
-    status: true
-
-  - name: "EuroSpeech"
-    repo_id: 'disco-eth/EuroSpeech'
-    url: "https://huggingface.co/datasets/disco-eth/EuroSpeech/tree/main"
-    tos_url: "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/EuroSpeech/source"
-    enabled: true
-    status: true
-
-  - name: 'Vaani'
-    repo_id: 'ARTPARK-IISc/Vaani'
-    url: 'https://huggingface.co/datasets/ARTPARK-IISc/Vaani'
-    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/Vaani/source'
-    enabled: true
-    status: true
-
-  - name: 'RealMAN'
-    repo_id: 'AISHELL/RealMAN'
-    url: 'https://huggingface.co/datasets/AISHELL/RealMAN/tree/main'
-    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/yushijing/RealMAN'
-    enabled: true
-    status: true
-
-  - name: 'Emilia-Dataset'
-    repo_id: 'amphion/Emilia-Dataset'
-    url: 'https://huggingface.co/datasets/amphion/Emilia-Dataset/tree/main'
-    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/Emilia-Dataset/source'
+  - name: 'multilingual_audio_alignments'
+    repo_id: 'takuM23/multilingual_audio_alignments'
+    url: 'https://huggingface.co/datasets/takuM23/multilingual_audio_alignments/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/multilingual-audio-alignments/source'
     enabled: true
     status: false
+
+  - name: 'ml_spoken_words'
+    repo_id: 'MLCommons/ml_spoken_words'
+    url: 'https://huggingface.co/datasets/MLCommons/ml_spoken_words/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/ml-spoken-words/source'
+    enabled: true
+    status: false
+
+  - name: 'granary-v2'
+    repo_id: 'nvidia/Granary-v2'
+    url: 'https://huggingface.co/datasets/nvidia/Granary-v2/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/granary-v2/source'
+    enabled: true
+    status: false
+
+  - name: 'granary-hifi'
+    repo_id: 'nvidia/Granary-HiFi'
+    url: 'https://huggingface.co/datasets/nvidia/Granary-HiFi/tree/main'
+    tos_url: 'tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/granary-hifi/source'
+    enabled: true
+    status: false
+

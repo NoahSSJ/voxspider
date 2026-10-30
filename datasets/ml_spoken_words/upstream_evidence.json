@@ -1,0 +1,152 @@
+{
+  "repo_id": "MLCommons/ml_spoken_words",
+  "commit_id": "0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218",
+  "sources": [
+    {
+      "kind": "fixed_commit_manifest_card_data",
+      "path": "datasets/ml_spoken_words/repo_manifest.json",
+      "commit_id": "0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218",
+      "facts": {
+        "pretty_name": "Multilingual Spoken Words",
+        "languages": [
+          "ar",
+          "as",
+          "br",
+          "ca",
+          "cnh",
+          "cs",
+          "cv",
+          "cy",
+          "de",
+          "dv",
+          "el",
+          "en",
+          "eo",
+          "es",
+          "et",
+          "eu",
+          "fa",
+          "fr",
+          "fy",
+          "ga",
+          "gn",
+          "ha",
+          "ia",
+          "id",
+          "it",
+          "ka",
+          "ky",
+          "lt",
+          "lv",
+          "mn",
+          "mt",
+          "nl",
+          "or",
+          "pl",
+          "pt",
+          "rm",
+          "ro",
+          "ru",
+          "rw",
+          "sah",
+          "sk",
+          "sl",
+          "sv",
+          "ta",
+          "tr",
+          "tt",
+          "uk",
+          "vi",
+          "zh"
+        ],
+        "language_bcp47": [
+          "fy-NL",
+          "ga-IE",
+          "rm-sursilv",
+          "rm-vallader",
+          "sv-SE",
+          "zh-CN"
+        ],
+        "license": [
+          "cc-by-4.0"
+        ],
+        "task_categories": [
+          "audio-classification"
+        ],
+        "task_ids": [],
+        "tags": [
+          "other-keyword-spotting"
+        ],
+        "description": null,
+        "citation": null
+      },
+      "note": "Manifest card_data is bound to the supplied fixed commit. Upstream metadata claims are not sample-level measurements."
+    },
+    {
+      "kind": "fixed_commit_readme_from_verified_tos_object",
+      "path": "README.md",
+      "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/ml-spoken-words/source/README.md",
+      "commit_id": "0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218",
+      "manifest_size": 8612,
+      "manifest_blob_id": "e4d6dd7e60db95ffa37f8b17ef44e85c4599cf49",
+      "tos_verification": {
+        "identity": {
+          "repo_id": "MLCommons/ml_spoken_words",
+          "commit_id": "0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218",
+          "path": "README.md",
+          "size": 8612,
+          "sha256": null,
+          "blob_id": "e4d6dd7e60db95ffa37f8b17ef44e85c4599cf49"
+        },
+        "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/ml-spoken-words/source/README.md",
+        "size": 8612,
+        "local_crc64": "14084970790265027278",
+        "remote_crc64": "14084970790265027278",
+        "method": "size_crc64",
+        "verified_at": "2026-10-14T06:38:12.852040+00:00"
+      },
+      "read_size_bytes": 8612,
+      "read_sha256": "44cdee0eba20069003e388f7eacd33f23d15a0095a240eb4c701af60d73f85b3",
+      "facts": {
+        "official_homepage": "https://mlcommons.org/en/multilingual-spoken-words/",
+        "license": "CC-BY 4.0",
+        "official_sample_claim": "23.4 million 1-second spoken examples",
+        "official_duration_claim": "over 6,000 hours",
+        "official_languages_claim": "50 languages",
+        "tasks": [
+          "keyword spotting",
+          "spoken term search"
+        ],
+        "formats": [
+          "wav (16 kHz)",
+          "opus (48 kHz)"
+        ],
+        "splits": [
+          "train",
+          "validation",
+          "test"
+        ],
+        "sample_fields": [
+          "file",
+          "is_valid",
+          "language",
+          "speaker_id",
+          "gender",
+          "keyword",
+          "audio"
+        ],
+        "source": "Common Voice; README says forced alignment is applied to crowd-sourced sentence-level audio."
+      },
+      "note": "Claims and field descriptions transcribed from the README object listed in the manifest and verified in TOS; sample count and duration remain rounded/lower-bound official claims."
+    }
+  ],
+  "manifest_summary": {
+    "file_count": 1333,
+    "total_size_bytes": 382426800241,
+    "all_entries_tos_verified_for_commit": true,
+    "non_iso_639_1_language_identifiers_in_metadata": [
+      "cnh",
+      "sah"
+    ]
+  }
+}

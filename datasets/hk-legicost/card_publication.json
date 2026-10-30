@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/hk-legicost/dataset_card.yaml",
+  "size": 3463,
+  "crc64": "8360765322709277705",
+  "sha256": "ed09c5912863972d83f40451abd2a8b9c43111123bf9ddb55a67e3a3f294d0f8",
+  "verified_at": "2026-10-20T04:05:04.669643+00:00"
+}

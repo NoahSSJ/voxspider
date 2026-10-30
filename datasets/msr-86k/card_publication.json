@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/msr-86k/dataset_card.yaml",
+  "size": 3547,
+  "crc64": "6601320223780438434",
+  "sha256": "242d55d621208f8df6715928048237c00f7fbec2e3ce56d59556a2b5c580619d",
+  "verified_at": "2026-10-15T10:00:09.076786+00:00"
+}

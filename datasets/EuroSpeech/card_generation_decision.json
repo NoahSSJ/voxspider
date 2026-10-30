@@ -1,1 +1,0 @@
-{"outcome":"manual_review","reason":"固定 commit README 已通过大小及 Git blob 校验，但许可为 other，且明确各国条款不同，无法确认全量数据许可适用性。配置未声明清单中的 italy/test（9 分片）和 slovakia/train（417 分片），完整范围的样本数及分 split 时长尚无法确认。已保存 upstream_evidence.json 和 card_generation_report.json；未生成占位卡片，未修改清单或远端对象。"}

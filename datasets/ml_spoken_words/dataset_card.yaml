@@ -1,0 +1,251 @@
+schema_version: speech_dataset_spec_v1.2
+dataset:
+  id: ml-spoken-words
+  name: Multilingual Spoken Words
+  version: unversioned
+  split: all
+  description: A multilingual corpus of isolated spoken-word audio paired with keyword labels, created from crowd-sourced
+    sentence recordings for keyword spotting and spoken term search. This raw snapshot preserves the source repository
+    files without conversion.
+status: raw
+source:
+  owner_type: public
+  source_platform: dataset_repository
+lineage:
+  upstream: []
+  derivation:
+  - step: archive_hf_snapshot
+    description: Archived the complete MLCommons/ml_spoken_words repository at fixed commit 0bc9df68e92fd6bb54176bf7eb29e2b9e97cb218;
+      preserved source paths and bytes without conversion.
+    date: '2026-10-26'
+    recipe_uri: hf:MLCommons/ml_spoken_words
+  manifests:
+    samples: null
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+  - language: ar
+    locale: ar
+  - language: as
+    locale: as
+  - language: br
+    locale: br
+  - language: ca
+    locale: ca
+  - language: other
+    locale: cnh
+  - language: cs
+    locale: cs
+  - language: cv
+    locale: cv
+  - language: cy
+    locale: cy
+  - language: de
+    locale: de
+  - language: dv
+    locale: dv
+  - language: el
+    locale: el
+  - language: en
+    locale: en
+  - language: eo
+    locale: eo
+  - language: es
+    locale: es
+  - language: et
+    locale: et
+  - language: eu
+    locale: eu
+  - language: fa
+    locale: fa
+  - language: fr
+    locale: fr
+  - language: fy
+    locale: fy-NL
+  - language: ga
+    locale: ga-IE
+  - language: gn
+    locale: gn
+  - language: ha
+    locale: ha
+  - language: ia
+    locale: ia
+  - language: id
+    locale: id
+  - language: it
+    locale: it
+  - language: ka
+    locale: ka
+  - language: ky
+    locale: ky
+  - language: lt
+    locale: lt
+  - language: lv
+    locale: lv
+  - language: mn
+    locale: mn
+  - language: mt
+    locale: mt
+  - language: nl
+    locale: nl
+  - language: or
+    locale: or
+  - language: pl
+    locale: pl
+  - language: pt
+    locale: pt
+  - language: rm
+    locale: rm-sursilv
+  - language: rm
+    locale: rm-vallader
+  - language: ro
+    locale: ro
+  - language: ru
+    locale: ru
+  - language: rw
+    locale: rw
+  - language: other
+    locale: sah
+  - language: sk
+    locale: sk
+  - language: sl
+    locale: sl
+  - language: sv
+    locale: sv-SE
+  - language: ta
+    locale: ta
+  - language: tr
+    locale: tr
+  - language: tt
+    locale: tt
+  - language: uk
+    locale: uk
+  - language: vi
+    locale: vi
+  - language: zh
+    locale: zh-CN
+  format:
+    storage: original upstream WAV and Opus archives
+    layout: data/{wav|opus}/{language}/{train|validation|test}/audio/*.tar.gz
+  statistics:
+    source_archive_files: 1333
+    source_archive_bytes: 382426800241
+    upstream_splits:
+    - train
+    - validation
+    - test
+    upstream_formats:
+      wav: 16 kHz
+      opus: 48 kHz
+    upstream_claims_not_independently_verified:
+      sample_count: 23.4 million 1-second spoken examples (rounded official claim)
+      total_duration: over 6,000 hours (official lower-bound claim)
+      language_count: 50 languages (official claim)
+      keywords: more than 340,000 (official claim)
+    upstream_language_codes:
+    - ar
+    - as
+    - br
+    - ca
+    - cnh
+    - cs
+    - cv
+    - cy
+    - de
+    - dv
+    - el
+    - en
+    - eo
+    - es
+    - et
+    - eu
+    - fa
+    - fr
+    - fy
+    - ga
+    - gn
+    - ha
+    - ia
+    - id
+    - it
+    - ka
+    - ky
+    - lt
+    - lv
+    - mn
+    - mt
+    - nl
+    - or
+    - pl
+    - pt
+    - rm
+    - ro
+    - ru
+    - rw
+    - sah
+    - sk
+    - sl
+    - sv
+    - ta
+    - tr
+    - tt
+    - uk
+    - vi
+    - zh
+    upstream_language_bcp47:
+    - fy-NL
+    - ga-IE
+    - rm-sursilv
+    - rm-vallader
+    - sv-SE
+    - zh-CN
+    sample_fields_documented_upstream:
+    - file
+    - is_valid
+    - language
+    - speaker_id
+    - gender
+    - keyword
+    - audio
+    task_mapping_note: The upstream identifies keyword spotting and spoken term search. Neither has a direct value
+      in the handbook usage enum, so intended_use is left empty.
+    statistics_note: Exact sample count and total duration were not computed from the archived samples. The upstream
+      values above are rounded or lower-bound claims and are not used as exact numeric values.
+labels:
+  fixed: {}
+  distribution: {}
+  unknown:
+  - interaction.type
+  - speaking_style
+  - scenario.environment
+  - scenario.channel
+  - scenario.product_context
+  - scenario.content_genre
+  - acoustic
+  - device
+  - domain
+  - speaker.voice_id
+  - speaker.perceived_voice_gender
+  - speaker.age_group
+  - speaker.speaker_consistency
+  - language.code_switching
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+usage:
+  intended_use: []
+  not_recommended_for: []
+license: CC-BY-4.0
+license_uri: https://creativecommons.org/licenses/by/4.0/
+homepage: https://huggingface.co/datasets/MLCommons/ml_spoken_words
+generation:
+  generated_at: '2026-10-26T15:58:39+08:00'
+  validation: Manifest records all 1,333 files (382,426,800,241 bytes) as locally and remotely verified; full TOS
+    path/size/CRC64 reconciliation passed on 2026-10-26. No sample-level count, duration aggregation, or audio decoding
+    was performed.

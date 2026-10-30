@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/zh/chinese-dialogue-speech-dataset/dataset_card.yaml",
+  "size": 3378,
+  "crc64": "17416739533681827458",
+  "sha256": "fb677b6059a50db092a64288f7d75a814e576f2c53f89956a2f8a77bbb06f003",
+  "verified_at": "2026-10-16T07:04:59.552439+00:00"
+}

@@ -1,0 +1,94 @@
+{
+  "repo_id": "mythicinfinity/libritts",
+  "commit_id": "35f26bdafa9883b5524f17931216af78632db8eb",
+  "collected_at": "2026-10-17T06:01:34+08:00",
+  "fixed_commit_artifacts": [
+    {
+      "path": "README.md",
+      "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/README.md",
+      "size": 5820,
+      "git_blob_sha1": "a715b924be949dc5c0f1c005e1ea2a2cc5aae265",
+      "tos_crc64": "10568107499780621364",
+      "verified_against_manifest": true,
+      "sha256": "not_present_in_manifest"
+    },
+    {
+      "path": "libritts_parquet_builder.py",
+      "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/libritts_parquet_builder.py",
+      "size": 11987,
+      "git_blob_sha1": "46c9401801a5d5114aca852858f8c03ed0e95052",
+      "tos_crc64": "4864275191705971214",
+      "verified_against_manifest": true,
+      "sha256": "not_present_in_manifest"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Dataset name LibriTTS; English; intended for text-to-speech; approximate corpus duration 585 hours; read English speech at 24 kHz; original and normalized transcript columns; speaker_id column; seven split/config inventory.",
+      "source": "same-commit README.md",
+      "source_commit": "35f26bdafa9883b5524f17931216af78632db8eb",
+      "source_uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/README.md",
+      "basis": "README content, CRC64 and Git blob SHA-1 match repo_manifest.json."
+    },
+    {
+      "claim": "README declares license cc-by-4.0.",
+      "source": "same-commit README.md front matter",
+      "source_commit": "35f26bdafa9883b5524f17931216af78632db8eb",
+      "source_uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/README.md",
+      "basis": "README content, CRC64 and Git blob SHA-1 match repo_manifest.json; independently corroborated by official OpenSLR SLR60 page."
+    },
+    {
+      "claim": "Official release reports 585.80 hours total, with per-split hours: dev-clean 8.97, test-clean 8.56, dev-other 6.43, test-other 6.69, train-clean-100 53.78, train-clean-360 191.29, train-other-500 310.08.",
+      "source": "Zen et al., LibriTTS: A Corpus Derived from LibriSpeech for Text-to-Speech, Table 2",
+      "url": "https://arxiv.org/pdf/1904.02882",
+      "source_relation": "Original dataset paper; used as official declared release statistics, not as a measurement of this fixed HF commit/TOS objects."
+    },
+    {
+      "claim": "OpenSLR SLR60 lists CC BY 4.0 and describes LibriTTS as approximately 585 hours of read English speech at 24 kHz.",
+      "source": "Official OpenSLR SLR60 dataset page",
+      "url": "https://www.openslr.org/60/",
+      "source_relation": "Official upstream dataset page; current external corroboration, not a fixed-commit artifact."
+    }
+  ],
+  "fixed_commit_inventory": {
+    "manifest_sha256": "1e246dbb916601b712f1e7be89b54e4544f587c15b705103003d5059215839cd",
+    "source_file_count": 228,
+    "source_total_bytes": 100289642145,
+    "data_shards_by_upstream_split": {
+      "dev.clean": {
+        "file_count": 3,
+        "bytes": 1537634696
+      },
+      "dev.other": {
+        "file_count": 2,
+        "bytes": 1099161623
+      },
+      "test.clean": {
+        "file_count": 4,
+        "bytes": 1468352686
+      },
+      "test.other": {
+        "file_count": 3,
+        "bytes": 1145685720
+      },
+      "train.clean.100": {
+        "file_count": 18,
+        "bytes": 9212704452
+      },
+      "train.clean.360": {
+        "file_count": 69,
+        "bytes": 32774025997
+      },
+      "train.other.500": {
+        "file_count": 126,
+        "bytes": 53052056857
+      }
+    },
+    "sample_row_count": "unknown; file inventory does not equal sample inventory"
+  },
+  "remote_card_check": {
+    "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/dataset_card.yaml",
+    "result": "not_found",
+    "evidence": "tosutil stat returned Status [404], error message [0017-00000003], the recognized NoSuchKey form in the workflow instructions."
+  }
+}

@@ -568,8 +568,6 @@ class HuggingfaceSpider():
                 raise
         return  
     
-    
-    
     def tos_upload(self, file_path: Path, bucket_name: str, object_name: str):
         # Implement the logic to upload the file to TOS (Tencent Object Storage)
         # This is a placeholder for the actual upload code

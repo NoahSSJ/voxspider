@@ -1,0 +1,1 @@
+{"outcome":"manual_review","reason":"无法读取必需的本地流程文件或审查数据集材料：两次读取尝试均在沙箱启动时失败，报错为“bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted”。因此未能读取 SKILL.md、transfer-state.md、card-and-publication.md、数据摄取手册、manifest 或现有卡片，也未能核验固定 commit 的 README/配置/样本清单及许可、时长、标签证据；未创建或修改任何文件。需人工恢复本地命令访问后重审。"}

@@ -1,0 +1,1 @@
+{"outcome":"manual_review","reason":"未生成卡片：固定 commit 的清单与 card_data 标明许可为 CC-BY-4.0、用途配置为 ASR，并列出 train/dev/test 与多个 dev 子集；但现有证据仅称“600+ hours”，缺少精确样本数及按 split 的时长。文件清单统计不能替代这些数据统计，且本地卡片不存在。需读取同 commit 的 README/配置和 TOS 中相关统计材料，逐文件核验所需统计后再生成卡片；本次未运行 reconcile/register，也未修改文件。"}

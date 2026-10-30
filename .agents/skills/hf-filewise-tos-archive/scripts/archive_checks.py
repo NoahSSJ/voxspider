@@ -194,8 +194,11 @@ generation.generated_at'''.split()
         or card['homepage'] != 'https://huggingface.co/datasets/' + manifest['id']):
         raise ValueError('卡片身份、raw 溯源或固定字段不符合规范')
     hours = card['data']['total_duration_hours']
-    if type(hours) not in (int, float) or not math.isfinite(hours) or hours < 0:
-        raise ValueError('卡片需要有证据支持的数值时长')
+    # The dataset-card handbook permits null for required fields with no
+    # evidence-backed value. In particular, do not turn unavailable audio
+    # duration into a misleading zero; explain the missing scope in the card.
+    if hours is not None and (type(hours) not in (int, float) or not math.isfinite(hours) or hours < 0):
+        raise ValueError('卡片时长必须是非负数值或按手册填 null')
     timestamp = card['generation']['generated_at']
     if isinstance(timestamp, str):
         timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))

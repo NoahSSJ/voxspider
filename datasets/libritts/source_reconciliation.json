@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "operation": "reconcile",
+  "checked_at": "2026-10-20T04:07:40.232033+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-10-20T04:07:40.231973+00:00",
+    "repo_id": "mythicinfinity/libritts",
+    "commit_id": "35f26bdafa9883b5524f17931216af78632db8eb",
+    "manifest_sha256": "b6c5b3fdf17d5dc774d8f6059762a882e4617b8d38cadd44af3975045d5048f2",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/",
+    "expected_count": 228,
+    "listed_count": 228,
+    "du_count": 228,
+    "expected_bytes": 100289642145,
+    "checked_bytes": 100289642145,
+    "du_bytes": 100289642145,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  }
+}

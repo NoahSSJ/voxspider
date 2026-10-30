@@ -1,0 +1,108 @@
+schema_version: speech_dataset_spec_v1.2
+
+dataset:
+  id: libritts
+  name: LibriTTS
+  version: unversioned
+  split: all
+  description: >-
+    A multi-speaker English read-speech corpus derived from LibriVox audio and
+    Project Gutenberg text, adapted for text-to-speech research. The upstream
+    README reports approximately 585 hours at 24 kHz.
+
+status: raw
+
+source:
+  owner_type: public
+  source_platform: dataset_repository
+
+lineage:
+  upstream: []
+  derivation:
+    - step: archive_hf_snapshot
+      description: >-
+        Archived all files from mythicinfinity/libritts at fixed revision
+        35f26bdafa9883b5524f17931216af78632db8eb, preserving upstream paths and
+        bytes without conversion.
+      date: "2026-10-20"
+      recipe_uri: "hf:mythicinfinity/libritts"
+  manifests:
+    samples: null
+
+data:
+  num_samples: null
+  total_duration_hours: 585.8
+  languages:
+    - {language: en, locale: en, duration_hours: 585.8}
+  format:
+    storage: parquet_with_wav_audio_24khz
+    layout: "data/{upstream_split}/*.parquet"
+    text_column: text_normalized
+  statistics:
+    archived_files: 228
+    archived_size_bytes: 100289642145
+    official_release_duration_hours: 585.8
+    official_release_duration_note: >-
+      Duration is an official release statistic reported in the paper and
+      README, not a measurement of this fixed Hugging Face commit.
+    sample_count_note: >-
+      The fixed-commit README and file manifest do not give row counts. The
+      228-file inventory is not a sample count; num_samples is null.
+    splits:
+      train.clean.100: {total_duration_hours: 53.78, parquet_files: 18}
+      train.clean.360: {total_duration_hours: 191.29, parquet_files: 69}
+      train.other.500: {total_duration_hours: 310.08, parquet_files: 126}
+      dev.clean: {total_duration_hours: 8.97, parquet_files: 3}
+      dev.other: {total_duration_hours: 6.43, parquet_files: 2}
+      test.clean: {total_duration_hours: 8.56, parquet_files: 4}
+      test.other: {total_duration_hours: 6.69, parquet_files: 3}
+    split_note: >-
+      All seven upstream splits are included. Durations are original release
+      statistics and have not been recalculated from these Parquet shards.
+
+labels:
+  fixed:
+    language: en
+    locale: en
+    interaction.type: monologue
+    speaking_style: read
+    scenario.content_genre: audiobook
+  distribution: {}
+  unknown:
+    - scenario.environment
+    - scenario.channel
+    - scenario.product_context
+    - acoustic
+    - device
+    - domain
+    - speaker.perceived_voice_gender
+    - speaker.age_group
+    - speaker.speaker_consistency
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: true
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+
+usage:
+  intended_use:
+    - tts_training
+    - tts_evaluation
+  not_recommended_for:
+    - voice_cloning
+
+license: CC-BY-4.0
+license_uri: https://www.openslr.org/60/
+homepage: https://huggingface.co/datasets/mythicinfinity/libritts
+
+generation:
+  generated_at: "2026-10-20T10:33:00+08:00"
+  validation: >-
+    Verified all 228 fixed-revision files (100,289,642,145 bytes) against TOS
+    size/CRC64 evidence; full source path/size/CRC64 reconciliation passed.
+    num_samples is null because no row count is present in the fixed-commit
+    README/config or file manifest. Reported official duration is not measured
+    from this snapshot.

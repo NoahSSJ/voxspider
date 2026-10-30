@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "operation": "reconcile",
+  "checked_at": "2026-10-29T13:00:31.599082+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-10-29T13:00:31.599005+00:00",
+    "repo_id": "nvidia/Granary-v2",
+    "commit_id": "81402b751b451b5fe4f4c29e8b40f92892f1e440",
+    "manifest_sha256": "4a10536f7a3fa99d96b273ec1e469bac269a7cd0854a76e2478f989e2541a5d3",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/granary-v2/source/",
+    "expected_count": 155,
+    "listed_count": 155,
+    "du_count": 155,
+    "expected_bytes": 111559928673,
+    "checked_bytes": 111559928673,
+    "du_bytes": 111559928673,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  }
+}

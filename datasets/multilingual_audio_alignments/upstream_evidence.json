@@ -1,0 +1,113 @@
+{
+  "repo_id": "takuM23/multilingual_audio_alignments",
+  "commit_id": "b4f8a132379b026441706af83258f4894b408222",
+  "retrieved_at": "2026-10-26T10:02:41.614376+00:00",
+  "sources": [
+    {
+      "kind": "README.md",
+      "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/multilingual-audio-alignments/source/README.md",
+      "commit_binding": "TOS URI is within the source prefix recorded for this repo_id and commit_id in repo_manifest.json; source_reconciliation.json for the same commit passed for all 2,208 listed objects.",
+      "local_temporary_copy": "/tmp/multilingual-audio-alignments-README.md",
+      "sha256": "81cc7a110d3c8dc3719fc2eb08b6ece2a53581b2d58d6dc50d4bddc787ebf5f3",
+      "bytes": 5990,
+      "facts": {
+        "license_claim": "CC-BY-4.0",
+        "license_qualification": "README instructs users to also respect the licenses of original source datasets and MFA; it does not enumerate or establish those licenses.",
+        "dataset_name": "Multilingual MFA-Aligned Speech Dataset (UNDER DEVELOPMENT)",
+        "description": "Consolidates speech corpora across languages with audio, transcript, word-level and phoneme-level alignment information; README describes audio as 16 kHz.",
+        "columns": [
+          "audio",
+          "transcript",
+          "phoneme_sequence",
+          "words",
+          "phonemes",
+          "source"
+        ],
+        "language_statistics_table": "10 rows; each per-language Hours and Samples entry is TBD.",
+        "total_duration_claim": "~20,000+ hours (estimated); not an exact measured value.",
+        "config_names_in_readme": [
+          "english",
+          "french",
+          "german",
+          "italian",
+          "japanese",
+          "korean",
+          "mandarin",
+          "polish",
+          "portuguese",
+          "russian",
+          "spanish",
+          "thai",
+          "turkish"
+        ],
+        "citation": "Manuscript in preparation (2026); citation metadata in repo_manifest.json is null."
+      }
+    },
+    {
+      "kind": "repo_manifest.json card_data and file_manifest",
+      "path": "/home/shuxianzhong/voxspider/datasets/multilingual_audio_alignments/repo_manifest.json",
+      "repo_id": "takuM23/multilingual_audio_alignments",
+      "commit_id": "b4f8a132379b026441706af83258f4894b408222",
+      "file_count": 2208,
+      "total_bytes": 3477240690270,
+      "all_file_entries_have_local_and_tos_verification": true,
+      "language_metadata": [
+        "en",
+        "de",
+        "fr",
+        "es",
+        "ru",
+        "ja",
+        "ko",
+        "pt",
+        "tr",
+        "th"
+      ],
+      "config_names": [
+        "english",
+        "french",
+        "german",
+        "italian",
+        "japanese",
+        "korean",
+        "mandarin",
+        "polish",
+        "portuguese",
+        "russian",
+        "spanish",
+        "thai",
+        "turkish"
+      ],
+      "physical_data_directory_counts": {
+        "english": 881,
+        "french": 165,
+        "german": 200,
+        "italian": 78,
+        "japanese": 58,
+        "japanse": 50,
+        "korean": 212,
+        "mandarin": 87,
+        "polish": 29,
+        "portuguese": 11,
+        "russian": 123,
+        "spanish": 158,
+        "thai": 59,
+        "turkish": 95
+      },
+      "license_metadata": "cc-by-4.0",
+      "notable_scope_issue": "card_data.language lists 10 languages, config/file tree contains 13 language directories (including Italian, Mandarin, Polish); README statistics table lists 10 and leaves duration/sample values TBD."
+    },
+    {
+      "kind": "source_reconciliation.json",
+      "path": "/home/shuxianzhong/voxspider/datasets/multilingual_audio_alignments/source_reconciliation.json",
+      "result": "PASS",
+      "repo_id": "takuM23/multilingual_audio_alignments",
+      "commit_id": "b4f8a132379b026441706af83258f4894b408222",
+      "checked_count": 2208,
+      "checked_bytes": 3477240690270,
+      "missing": 0,
+      "extra": 0,
+      "mismatches": 0
+    }
+  ]
+}

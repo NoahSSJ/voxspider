@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/multi/multilingual-audio-alignments/dataset_card.yaml",
+  "size": 3879,
+  "crc64": "8787785062938468058",
+  "sha256": "b46dc9496ffa510a055402aad5accb4751fa226b24d0e93e6ce07017f446fa07",
+  "verified_at": "2026-10-27T02:20:49.900417+00:00"
+}

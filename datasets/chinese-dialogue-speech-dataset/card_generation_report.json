@@ -1,0 +1,46 @@
+{
+  "repo_id": "MYJOKERML/chinese-dialogue-speech-dataset",
+  "commit_id": "c9e5b32b7016b578d293075cace4eae08632b06d",
+  "card": "dataset_card.yaml",
+  "evidence": {
+    "source": "README.md and LICENSE.txt downloaded from the verified TOS source objects for this fixed commit; repo_manifest.json and source_reconciliation.json",
+    "repository": {
+      "archive_files": 13,
+      "archive_bytes": 145865632549,
+      "source_reconciliation_passed": true
+    },
+    "upstream_reported": {
+      "dialogues": 46080,
+      "audio_files": "approximately 275000",
+      "duration_hours": "approximately 1000-1200",
+      "archive_batches": 10,
+      "language": "zh",
+      "audio_format": "WAV, 16 kHz",
+      "model": "CosyVoice2-0.5B"
+    },
+    "license": {
+      "file": "LICENSE.txt",
+      "declared_license": "MIT",
+      "scope_issue": "The license text describes its subject as Software; README does not establish that the audio/data are covered.",
+      "card_value": null
+    }
+  },
+  "checks_executed": [
+    "Reviewed fixed-revision README and LICENSE.txt retrieved from reconciled TOS source objects",
+    "Confirmed all 13 manifest files have local and TOS verification records",
+    "Confirmed full TOS reconciliation passed with no missing, extra, mismatched, or errored objects",
+    "Marked approximate upstream statistics as reported, not independently measured",
+    "Validated card syntax, required card structure, identity, raw status, lineage, and timezone"
+  ],
+  "checks_not_executed": [
+    "Independent dialogue or audio-file counting inside compressed archives",
+    "Independent audio-duration measurement",
+    "Audio decoding or acoustic quality checks",
+    "Independent legal confirmation that the MIT license covers audio and dataset contents"
+  ],
+  "known_limitations": [
+    "Dataset audio/data license scope remains unconfirmed; the card sets license to null and records the issue explicitly.",
+    "Upstream dialogue, file-count, and duration figures are approximate README claims, not independently verified measurements."
+  ],
+  "generation_method": "Assistant-authored from the verified fixed-revision README and LICENSE, manifest, project handbook, and completed source reconciliation."
+}

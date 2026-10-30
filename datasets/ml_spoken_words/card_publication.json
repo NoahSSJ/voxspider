@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/asr/multi/ml-spoken-words/dataset_card.yaml",
+  "size": 5357,
+  "crc64": "14708817640383476364",
+  "sha256": "44b75da6c7a3fd4a575e1bb6155f2ad2db623377e03b899491e63008ced1c7b5",
+  "verified_at": "2026-10-26T08:02:35.471269+00:00"
+}

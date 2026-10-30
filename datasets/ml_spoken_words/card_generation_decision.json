@@ -1,0 +1,4 @@
+{
+  "outcome": "ready",
+  "reason": "本地卡片已生成并完整记录异常：精确样本数/时长不可得时填 null，保留上游约数；cnh/sah 标记为 other 并保留 locale；keyword spotting/spoken term search 不强行映射到用途枚举。全量源对账通过。"
+}

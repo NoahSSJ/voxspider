@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "operation": "register",
+  "checked_at": "2026-10-20T04:07:40.316746+00:00",
+  "source_reconciliation": {
+    "passed": true,
+    "checked_at": "2026-10-20T04:07:45.823374+00:00",
+    "repo_id": "mythicinfinity/libritts",
+    "commit_id": "35f26bdafa9883b5524f17931216af78632db8eb",
+    "manifest_sha256": "0e9d7728b63c50c79a6651343d0455a1be99eca22e145927d50e034e397a4137",
+    "tos_prefix": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/source/",
+    "expected_count": 228,
+    "listed_count": 228,
+    "du_count": 228,
+    "expected_bytes": 100289642145,
+    "checked_bytes": 100289642145,
+    "du_bytes": 100289642145,
+    "missing": [],
+    "extra": [],
+    "mismatches": [],
+    "errors": []
+  },
+  "card_verification": {
+    "uri": "tos://vox-asr-audio-data/SPEECH-DATA-TEMP/raw/dataset_repository/tts/en/libritts/dataset_card.yaml",
+    "size": 3403,
+    "crc64": "3503738897264123597",
+    "sha256": "1ef2dc249bba48b87af4fe518e74433b3ef5eeab7ce9f4e81b68695ba6becfa6",
+    "verified_at": "2026-10-20T04:07:45.856248+00:00"
+  },
+  "registry": "/home/shuxianzhong/voxspider/archived.json",
+  "registered_manifest_sha256": "eec7877168a28b442c2ee126192e3c3b2c8efe1541221ffeb5062f418f3a9e6d"
+}

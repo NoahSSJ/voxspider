@@ -1,0 +1,104 @@
+schema_version: speech_dataset_spec_v1.2
+
+dataset:
+  id: chinese-dialogue-speech-dataset
+  name: 中文多轮对话语音合成数据集
+  version: unversioned
+  split: all
+  description: >-
+    固定 Hugging Face revision 的中文多轮对话语音数据原始归档。上游说明
+    数据包含文学问答、自然对话和诗词文化内容，提供文本及合成语音。
+
+status: raw
+
+source:
+  owner_type: public
+  source_platform: dataset_repository
+
+lineage:
+  upstream: []
+  derivation:
+    - step: archive_hf_snapshot
+      description: >-
+        原样归档 MYJOKERML/chinese-dialogue-speech-dataset 固定 revision，保留
+        上游文件路径和字节，未解压、转换或重编码。
+      date: "2026-10-16"
+      recipe_uri: "hf:MYJOKERML/chinese-dialogue-speech-dataset"
+  manifests:
+    samples: null
+
+data:
+  num_samples: null
+  total_duration_hours: null
+  languages:
+    - language: zh
+      locale: zh
+  format:
+    storage: wav_16k
+    layout: "batch_001.tar.gz through batch_010.tar.gz; original metadata.json files are inside the archives"
+    text_column: question_1_text / answer_1_text and corresponding dialogue turn text fields
+  statistics:
+    archived_files: 13
+    archived_size_bytes: 145865632549
+    upstream_reported_dialogues: 46080
+    upstream_reported_audio_files: "approximately 275000"
+    upstream_reported_duration_hours: "approximately 1000-1200"
+    upstream_archive_batches: 10
+    sample_count_note: >-
+      The upstream counts are README-reported approximations; no archive was
+      unpacked for an independent count. num_samples is null.
+    duration_note: >-
+      The upstream duration is a range, not an independently measured value;
+      total_duration_hours is null.
+    rights_scope_note: >-
+      The repository LICENSE.txt is MIT text referring to the licensed subject
+      as Software. The README does not establish whether that license covers
+      the audio and dataset contents. Coverage remains unconfirmed.
+
+labels:
+  fixed:
+    language: zh
+    interaction.type: dialogue
+  distribution: {}
+  unknown:
+    - speaking_style
+    - scenario.environment
+    - scenario.channel
+    - scenario.product_context
+    - scenario.content_genre
+    - acoustic
+    - device
+    - domain
+    - speaker.speaker_id
+    - speaker.voice_id
+    - speaker.perceived_voice_gender
+    - speaker.age_group
+    - speaker.speaker_consistency
+  availability:
+    transcript: true
+    timestamps: false
+    speaker_labels: false
+    diarization: false
+    pronunciation: false
+    phoneme: false
+    prosody: false
+
+usage:
+  intended_use:
+    - tts_training
+    - asr_training
+  not_recommended_for:
+    - voice_cloning
+
+license: null
+license_uri: https://huggingface.co/datasets/MYJOKERML/chinese-dialogue-speech-dataset/commit/c9e5b32b7016b578d293075cace4eae08632b06d
+homepage: https://huggingface.co/datasets/MYJOKERML/chinese-dialogue-speech-dataset
+
+generation:
+  generated_at: "2026-10-16T15:04:00+08:00"
+  validation: >-
+    All 13 fixed-revision source files (145,865,632,549 bytes) have local and
+    TOS size/CRC64 verification records; full source reconciliation passed with
+    no missing, extra, mismatched, or errored objects. README-reported counts
+    and duration are not independent measurements. The dataset license scope
+    for audio/data is unconfirmed; license is null pending clarification.

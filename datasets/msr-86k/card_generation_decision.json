@@ -1,0 +1,1 @@
+{"outcome":"retry","reason":"本地命令执行环境无法启动（bwrap 返回 “RTM_NEWADDR: Operation not permitted”），因此无法读取必需的技能文件、手册或数据集证据，也未修改任何文件。请恢复命令环境后重试。"}
